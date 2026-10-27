@@ -17,7 +17,7 @@ struct SectionHeader<Trailing: View>: View {
 
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
-            Text(title)
+            Text(AppLocalization.text(title))
                 .textCase(.uppercase)
                 .font(.uplift.text(13, weight: .semibold))
                 .tracking(0.4)

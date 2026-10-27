@@ -35,7 +35,7 @@ struct UpliftSegmentedControl: View {
                                 .fill(isActive ? ink : Color.uplift.fgDim)
                                 .frame(width: 6, height: 6)
                         }
-                        Text(segment.label)
+                        Text(AppLocalization.text(segment.label))
                             .font(.uplift.text(13, weight: .semibold))
                             .kerning(-0.1)
                     }

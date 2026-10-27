@@ -78,7 +78,7 @@ struct TodayView: View {
             }
             Button("Keep Training", role: .cancel) {}
         } message: {
-            let dayName = workoutVM.suspendedSession?.dayType.rawValue ?? "current"
+            let dayName = workoutVM.suspendedSession?.dayType.displayName ?? "current"
             Text("Your \(dayName) Day workout will be discarded. This can't be undone.")
         }
         .confirmationDialog(
@@ -109,7 +109,7 @@ struct TodayView: View {
             titleVisibility: .visible
         ) {
             if let dayType = confirmingDayType {
-                Button("Start \(dayType.rawValue) Day", role: .destructive) {
+                Button("Start \(dayType.displayName) Day", role: .destructive) {
                     workoutVM.abandonSuspendedAndStart(dayType: dayType)
                     confirmingDayType = nil
                 }
@@ -119,8 +119,8 @@ struct TodayView: View {
             }
         } message: {
             let count = workoutVM.suspendedInProgressExerciseCount
-            let dayName = workoutVM.suspendedSession?.dayType.rawValue ?? "current"
-            Text("Your \(dayName) Day workout has \(count) exercise\(count == 1 ? "" : "s") in progress. Starting a new workout will discard it.")
+            let dayName = workoutVM.suspendedSession?.dayType.displayName ?? "current"
+            Text("Your \(dayName) Day workout has \(count) exercises in progress. Starting a new workout will discard it.")
         }
     }
 
@@ -140,7 +140,7 @@ struct TodayView: View {
     }
 
     private func eyebrow(_ text: String) -> some View {
-        Text(text)
+        Text(AppLocalization.text(text))
             .textCase(.uppercase)
             .font(.uplift.text(11, weight: .semibold))
             .tracking(0.4)

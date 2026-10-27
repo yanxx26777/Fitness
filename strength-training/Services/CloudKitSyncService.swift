@@ -16,7 +16,11 @@ final class CloudKitSyncService {
 
     private var observers: [Any] = []
 
-    init() {
+    let isEnabled: Bool
+
+    init(enabled: Bool = false) {
+        isEnabled = enabled
+        guard enabled else { return }
         lastSyncDate = UserDefaults.standard.object(forKey: "lastCloudKitSyncDate") as? Date
         setupObservers()
         Task { await checkAccountStatus() }
@@ -29,6 +33,7 @@ final class CloudKitSyncService {
     // MARK: - Account Status
 
     func checkAccountStatus() async {
+        guard isEnabled else { return }
         do {
             let status = try await CKContainer.default().accountStatus()
             await MainActor.run { self.accountStatus = status }

@@ -14,24 +14,24 @@ enum TodayStats {
     /// Section-header label for the most recent completed session.
     /// Same day → "Today"; 1 day ago → "Yesterday"; 2–6 days → weekday name;
     /// 7+ days → "N days ago". (Rendered uppercase by SectionHeader.)
-    static func relativeDayLabel(for date: Date, now: Date = .now, calendar: Calendar = .current) -> String {
+    static func relativeDayLabel(for date: Date, now: Date = .now, calendar: Calendar = .current, locale: Locale = .current) -> String {
         let startNow = calendar.startOfDay(for: now)
         let startDate = calendar.startOfDay(for: date)
         let days = calendar.dateComponents([.day], from: startDate, to: startNow).day ?? 0
         switch days {
         case ..<1:
-            return "Today"
+            return AppLocalization.text("Today", locale: locale)
         case 1:
-            return "Yesterday"
+            return AppLocalization.text("Yesterday", locale: locale)
         case 2...6:
             let formatter = DateFormatter()
             formatter.calendar = calendar
             formatter.timeZone = calendar.timeZone
-            formatter.locale = Locale(identifier: "en_US")   // app ships en-US copy throughout
+            formatter.locale = locale
             formatter.dateFormat = "EEEE"
             return formatter.string(from: date)
         default:
-            return "\(days) days ago"
+            return String(format: AppLocalization.text("%lld days ago", locale: locale), locale: locale, days)
         }
     }
 
@@ -48,13 +48,15 @@ enum TodayStats {
     static func weekCells(
         sessions: [(date: Date, dayType: DayType)],
         now: Date = .now,
-        calendar: Calendar = .current
+        calendar: Calendar = .current,
+        locale: Locale = .current
     ) -> [WeekDayCell] {
         var cal = calendar
         cal.firstWeekday = 2   // Monday
         guard let weekStart = cal.dateInterval(of: .weekOfYear, for: now)?.start else { return [] }
 
-        let letters = ["M", "T", "W", "T", "F", "S", "S"]
+        let letters = locale.language.languageCode?.identifier == "zh"
+            ? ["一", "二", "三", "四", "五", "六", "日"] : ["M", "T", "W", "T", "F", "S", "S"]
         return (0..<7).map { offset in
             let dayDate = cal.date(byAdding: .day, value: offset, to: weekStart)!
             let trained = sessions
@@ -72,18 +74,14 @@ enum TodayStats {
     // MARK: - Volume formatting
 
     /// "12,840" — grouped, no fraction (rounded).
-    static func formatVolume(_ lbs: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 0
-        formatter.locale = Locale(identifier: "en_US")
-        return formatter.string(from: NSNumber(value: lbs.rounded())) ?? String(Int(lbs.rounded()))
+    static func formatVolume(_ lbs: Double, unit: WeightUnitSystem = .current) -> String {
+        WeightUnitSystem.format(unit.fromStoredPounds(lbs), maximumFractionDigits: 0)
     }
 
-    /// "9,840" below 10k; "187k" (rounded) at 10k and above — for tight strips.
-    static func formatCompactVolume(_ lbs: Double) -> String {
-        lbs >= 10_000
-            ? "\(Int((lbs / 1000).rounded()))k"
-            : formatVolume(lbs)
+    static func formatCompactVolume(_ lbs: Double, unit: WeightUnitSystem = .current) -> String {
+        let value = unit.fromStoredPounds(lbs)
+        return value.isFinite && value >= 10_000
+            ? "\(Int(min(value / 1000, Double(Int.max / 2)).rounded()))k"
+            : formatVolume(lbs, unit: unit)
     }
 }

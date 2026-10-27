@@ -7,6 +7,15 @@ import XCTest
 @testable import strength_training
 
 final class TodayStatsTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        UserDefaults.standard.set("imperial", forKey: "weightUnitSystem")
+    }
+    override func tearDown() {
+        UserDefaults.standard.removeObject(forKey: "weightUnitSystem")
+        super.tearDown()
+    }
+
 
     private var calendar: Calendar {
         var cal = Calendar(identifier: .gregorian)
@@ -26,20 +35,20 @@ final class TodayStatsTests: XCTestCase {
     // MARK: - relativeDayLabel
 
     func test_label_sameDay_isToday() {
-        XCTAssertEqual(TodayStats.relativeDayLabel(for: day(2026, 6, 10, hour: 8), now: wednesdayNoon, calendar: calendar), "Today")
+        XCTAssertEqual(TodayStats.relativeDayLabel(for: day(2026, 6, 10, hour: 8), now: wednesdayNoon, calendar: calendar, locale: Locale(identifier: "en_US")), "Today")
     }
 
     func test_label_oneDayAgo_isYesterday() {
-        XCTAssertEqual(TodayStats.relativeDayLabel(for: day(2026, 6, 9), now: wednesdayNoon, calendar: calendar), "Yesterday")
+        XCTAssertEqual(TodayStats.relativeDayLabel(for: day(2026, 6, 9), now: wednesdayNoon, calendar: calendar, locale: Locale(identifier: "en_US")), "Yesterday")
     }
 
     func test_label_threeDaysAgo_isWeekdayName() {
         // 2026-06-07 is a Sunday
-        XCTAssertEqual(TodayStats.relativeDayLabel(for: day(2026, 6, 7), now: wednesdayNoon, calendar: calendar), "Sunday")
+        XCTAssertEqual(TodayStats.relativeDayLabel(for: day(2026, 6, 7), now: wednesdayNoon, calendar: calendar, locale: Locale(identifier: "en_US")), "Sunday")
     }
 
     func test_label_sevenDaysAgo_isNDaysAgo() {
-        XCTAssertEqual(TodayStats.relativeDayLabel(for: day(2026, 6, 3), now: wednesdayNoon, calendar: calendar), "7 days ago")
+        XCTAssertEqual(TodayStats.relativeDayLabel(for: day(2026, 6, 3), now: wednesdayNoon, calendar: calendar, locale: Locale(identifier: "en_US")), "7 days ago")
     }
 
     // MARK: - weekCells (Monday-start week)
@@ -50,7 +59,7 @@ final class TodayStatsTests: XCTestCase {
             (day(2026, 6, 8), .arms),    // Monday
             (day(2026, 6, 10, hour: 7), .legs),  // Wednesday (today)
         ]
-        let cells = TodayStats.weekCells(sessions: sessions, now: wednesdayNoon, calendar: calendar)
+        let cells = TodayStats.weekCells(sessions: sessions, now: wednesdayNoon, calendar: calendar, locale: Locale(identifier: "en_US"))
 
         XCTAssertEqual(cells.count, 7)
         XCTAssertEqual(cells.map(\.letter), ["M", "T", "W", "T", "F", "S", "S"])
@@ -66,7 +75,7 @@ final class TodayStatsTests: XCTestCase {
         let sessions: [(date: Date, dayType: DayType)] = [
             (day(2026, 6, 7), .arms),    // Sunday of PREVIOUS week
         ]
-        let cells = TodayStats.weekCells(sessions: sessions, now: wednesdayNoon, calendar: calendar)
+        let cells = TodayStats.weekCells(sessions: sessions, now: wednesdayNoon, calendar: calendar, locale: Locale(identifier: "en_US"))
         XCTAssertTrue(cells.allSatisfy { $0.trained == nil })
     }
 
@@ -87,7 +96,7 @@ final class TodayStatsTests: XCTestCase {
     func test_weekCells_sundayIsLastDayOfWeek() {
         // Sun 2026-06-14 — last slot of a Monday-start week, not the first of the next
         let sunday = day(2026, 6, 14)
-        let cells = TodayStats.weekCells(sessions: [], now: sunday, calendar: calendar)
+        let cells = TodayStats.weekCells(sessions: [], now: sunday, calendar: calendar, locale: Locale(identifier: "en_US"))
         XCTAssertEqual(cells.count, 7)
         XCTAssertTrue(cells[6].isToday)
         XCTAssertTrue(cells[0..<6].allSatisfy { !$0.isToday })

@@ -6,6 +6,17 @@
 	objectVersion = 77;
 	objects = {
 
+        F17000000000000000000001 = {isa = PBXFileSystemSynchronizedRootGroup; path = "strength-training-ui-tests"; sourceTree = "<group>"; };
+        F17000000000000000000002 = {isa = PBXNativeTarget; buildConfigurationList = F17000000000000000000003; buildPhases = (F17000000000000000000004, F17000000000000000000005, F17000000000000000000006); buildRules = (); dependencies = (F6CD2017D76F9477DC870001); fileSystemSynchronizedGroups = (F17000000000000000000001); name = "strength-training-ui-tests"; productName = "strength-training-ui-tests"; productReference = F17000000000000000000007; productType = "com.apple.product-type.bundle.ui-testing"; };
+        F17000000000000000000003 = {isa = XCConfigurationList; buildConfigurations = (F17000000000000000000008, F17000000000000000000009); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+        F17000000000000000000004 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+        F17000000000000000000005 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+        F17000000000000000000006 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+        F17000000000000000000007 = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = "strength-training-ui-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+        F17000000000000000000008 = {isa = XCBuildConfiguration; buildSettings = {GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.yanxx26777.fitness.uitests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 6.0; SWIFT_STRICT_CONCURRENCY = minimal; TARGETED_DEVICE_FAMILY = "1,2"; TEST_TARGET_NAME = "strength-training"; CODE_SIGN_STYLE = Automatic; }; name = Debug; };
+        F17000000000000000000009 = {isa = XCBuildConfiguration; buildSettings = {GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.yanxx26777.fitness.uitests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 6.0; SWIFT_STRICT_CONCURRENCY = minimal; TARGETED_DEVICE_FAMILY = "1,2"; TEST_TARGET_NAME = "strength-training"; CODE_SIGN_STYLE = Automatic; }; name = Release; };
+
+
 /* Begin PBXBuildFile section */
 		023DF2513891F3465C785A7B /* LoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75D110844E6FE14A1B67FD5 /* LoaderView.swift */; };
 		058F457680F9F458E2562E70 /* ProgressionParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7455DAD78FC12D62CD5226C5 /* ProgressionParameters.swift */; };
@@ -59,6 +70,11 @@
 		F1575293D208883B22818EF3 /* ParameterPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165BF58640500A519020F992 /* ParameterPanel.swift */; };
 		F782886371C54BEC655F1D47 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C7938965779BE5D2C32989 /* DashboardView.swift */; };
 		FD8D7B4D50F612D4C3DC32C0 /* ExerciseDashboardRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90D8161F780FCDA4CBDA8C4 /* ExerciseDashboardRow.swift */; };
+		394DCC54774AC33B905E3F2E /* ModelContainerFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501DD0BB6FCA84B0E8BDC2CD; };
+		9BF65C3D7E70211F87CE3D7A /* WeightUnitSystemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2A9CE3FFDA772F63317C05; };
+		E2A4770D59C7A4836B606C66 /* SeedDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 309F7029DD2FBF21BF8981BD; };
+		6CFA1EAA386D0B06253C42E2 /* AppTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816BC8B62F32AEE91431031; };
+		141AA733E1DBE60C23B5A858 /* BackupExportFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9D8F7EB233EE60BC061B2F; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,6 +145,11 @@
 		FC046B453D9070D004742173 /* ConfigArtifact.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConfigArtifact.swift; sourceTree = "<group>"; };
 		FC5ED87967CB436716AA1EF1 /* ProgressionTypes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ProgressionTypes.swift; sourceTree = "<group>"; };
 		FCD72FE4DBC5F2CB9BEB771B /* strength-training-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "strength-training-tests.xctest"; path = strength_training_tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		501DD0BB6FCA84B0E8BDC2CD /* ModelContainerFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelContainerFactoryTests.swift; sourceTree = "<group>"; };
+		2D2A9CE3FFDA772F63317C05 /* WeightUnitSystemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightUnitSystemTests.swift; sourceTree = "<group>"; };
+		309F7029DD2FBF21BF8981BD /* SeedDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedDataTests.swift; sourceTree = "<group>"; };
+		2816BC8B62F32AEE91431031 /* AppTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabTests.swift; sourceTree = "<group>"; };
+		8E9D8F7EB233EE60BC061B2F /* BackupExportFileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupExportFileTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -251,6 +272,11 @@
 		51C16B157883C4911DC9C13D /* strength-training-tests */ = {
 			isa = PBXGroup;
 			children = (
+				8E9D8F7EB233EE60BC061B2F,
+				2816BC8B62F32AEE91431031,
+				309F7029DD2FBF21BF8981BD,
+				2D2A9CE3FFDA772F63317C05,
+				501DD0BB6FCA84B0E8BDC2CD,
 				D922C1B9725A7CCFCA27550B /* AlgorithmFixtures.swift */,
 				A284E56C056FDF4F4E7CE02C /* ProgressionServicePureFunctionTests.swift */,
 				9BB09AE52C260DDF439056CC /* ProgressionServiceParityTests.swift */,
@@ -354,6 +380,7 @@
 				E18CFB602F4A312400991D60 /* Products */,
 				DCE6C1DA63A5EBF17D0B879B /* Frameworks */,
 				51C16B157883C4911DC9C13D /* strength-training-tests */,
+                F17000000000000000000001,
 				08081F3FD2336389AEDC8540 /* progression-lab */,
 				0F1B900D7BD7B14B41F6AEC0 /* progression-lab-tests */,
 			);
@@ -364,6 +391,7 @@
 			children = (
 				E18CFB5F2F4A312400991D60 /* strength-training.app */,
 				FCD72FE4DBC5F2CB9BEB771B /* strength-training-tests.xctest */,
+                F17000000000000000000007,
 				D831F8CB0728963D5B3EAFD0 /* ProgressionLab.app */,
 				8F65F06B7DAEC56D1511479D /* progression-lab-tests.xctest */,
 			);
@@ -465,6 +493,7 @@
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				"zh-Hans",
 				en,
 				Base,
 			);
@@ -475,6 +504,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+                F17000000000000000000002,
 				E18CFB5E2F4A312400991D60 /* strength-training */,
 				CF2665086E70C7E1BDE1852D /* strength-training-tests */,
 				4F24BB600FA0AED51F0C2A5B /* ProgressionLab */,
@@ -559,6 +589,11 @@
 				63C0E77E57834034C11BC61C /* ProgressionServiceParityTests.swift in Sources */,
 				E03682C16B5A7E61108A1231 /* UpliftTokensTests.swift in Sources */,
 				E775E13496C6909B4FF9F6EB /* StepperLogicTests.swift in Sources */,
+				141AA733E1DBE60C23B5A858 /* BackupExportFileTests.swift in Sources */,
+				6CFA1EAA386D0B06253C42E2 /* AppTabTests.swift in Sources */,
+				E2A4770D59C7A4836B606C66 /* SeedDataTests.swift in Sources */,
+				9BF65C3D7E70211F87CE3D7A /* WeightUnitSystemTests.swift in Sources */,
+				394DCC54774AC33B905E3F2E /* ModelContainerFactoryTests.swift in Sources */,
 				DD41F85ED9D23F809FE149E0 /* TodayStatsTests.swift in Sources */,
 				F10E09BC7B41DF904051DC08 /* PrevSessionsStripDataTests.swift in Sources */,
 				93349D7552961CAD8C765FB7 /* FocusTargetLogicTests.swift in Sources */,
@@ -618,7 +653,7 @@
 				CODE_SIGN_ENTITLEMENTS = "progression-lab/ProgressionLab.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = V8227YC5UT;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
@@ -628,7 +663,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.danielkuhlwein.ProgressionLab.debug;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yanxx26777.fitness.lab;
 				PRODUCT_NAME = ProgressionLab;
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -644,7 +679,7 @@
 				CODE_SIGN_ENTITLEMENTS = "progression-lab/ProgressionLab.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = V8227YC5UT;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
@@ -654,7 +689,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.danielkuhlwein.ProgressionLab.debug;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yanxx26777.fitness.lab;
 				PRODUCT_NAME = ProgressionLab;
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -668,10 +703,10 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = V8227YC5UT;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.danielkuhlwein.strengthtrainingtests;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yanxx26777.fitnesstests;
 				PRODUCT_NAME = strength_training_tests;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
@@ -685,10 +720,10 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = V8227YC5UT;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.danielkuhlwein.strengthtrainingtests;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yanxx26777.fitnesstests;
 				PRODUCT_NAME = strength_training_tests;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
@@ -732,7 +767,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = V8227YC5UT;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -750,7 +785,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -796,7 +831,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = V8227YC5UT;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -808,7 +843,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -827,11 +862,11 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = WG7BK7C4BG;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "strength-training/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = UpLift;
+				INFOPLIST_KEY_CFBundleDisplayName = Fitness;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "View workout metrics like calories and heart rate during your workouts.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Save your strength training workouts to Apple Health for Activity Ring credit and fitness tracking.";
@@ -844,7 +879,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.danielkuhlwein.strengthtraining;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yanxx26777.fitness;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -866,11 +901,11 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = WG7BK7C4BG;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "strength-training/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = UpLift;
+				INFOPLIST_KEY_CFBundleDisplayName = Fitness;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "View workout metrics like calories and heart rate during your workouts.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Save your strength training workouts to Apple Health for Activity Ring credit and fitness tracking.";
@@ -883,7 +918,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.danielkuhlwein.strengthtraining;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yanxx26777.fitness;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -901,10 +936,10 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = V8227YC5UT;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.danielkuhlwein.progressionlabtests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yanxx26777.fitness.labtests;
 				PRODUCT_NAME = progression_lab_tests;
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
@@ -917,10 +952,10 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = V8227YC5UT;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.danielkuhlwein.progressionlabtests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yanxx26777.fitness.labtests;
 				PRODUCT_NAME = progression_lab_tests;
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;

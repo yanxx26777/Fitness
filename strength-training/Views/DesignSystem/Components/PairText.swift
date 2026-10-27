@@ -13,7 +13,7 @@ enum PairText {
     /// "225 × 5" or "225 × 5 · 5 · 4" (a same-weight run). An empty `reps`
     /// renders the weight alone — no dangling separator.
     static func pair(weight: Double, reps: [Int], font: Font) -> Text {
-        var text = Text(StepperLogic.format(weight)).font(font).foregroundColor(.uplift.weightTint)
+        var text = Text(WeightUnitSystem.current.formatStoredPounds(weight)).font(font).foregroundColor(.uplift.weightTint)
         guard !reps.isEmpty else { return text }
         text = text + Text(" × ").font(font).foregroundColor(.uplift.fgDim)
         for (index, rep) in reps.enumerated() {

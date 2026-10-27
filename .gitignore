@@ -53,3 +53,9 @@ ExportOptions.plist
 Secrets.swift
 *.xcconfig
 !*.xcconfig.example
+
+.superpowers/
+Config/Local.xcconfig
+.build/
+TestResults.xcresult/
+test-summary.json

@@ -18,23 +18,8 @@ struct ContentView: View {
     var body: some View {
         Group {
             if let vm = workoutViewModel {
-                TabView(selection: $selectedTab) {
-                    Tab("Workout", systemImage: "dumbbell", value: "workout") {
-                        WorkoutTabView(viewModel: vm)
-                    }
-                    Tab("History", systemImage: "clock", value: "history") {
-                        HistoryListView()
-                    }
-                    Tab("Progress", systemImage: "chart.line.uptrend.xyaxis", value: "progress") {
-                        ProgressDashboardView()
-                    }
-                    Tab("Exercises", systemImage: "list.bullet", value: "exercises") {
-                        ExerciseLibraryView()
-                    }
-                    Tab("Settings", systemImage: "gear", value: "settings") {
-                        SettingsView(healthKitService: healthKitService, cloudKitSyncService: cloudKitSyncService)
-                    }
-                }
+                AppShellView(workoutViewModel: vm, healthKitService: healthKitService,
+                             cloudKitSyncService: cloudKitSyncService)
             } else {
                 // Mirrors the UILaunchScreen (LaunchBackground + LaunchGlyph) so the
                 // handoff from the system launch screen is seamless.
@@ -48,17 +33,12 @@ struct ContentView: View {
         .preferredColorScheme(.dark)
         .onAppear {
             SeedData.migrateExerciseNames(context: modelContext)
-            SeedData.deduplicateExercises(context: modelContext)
             SeedData.seedIfNeeded(context: modelContext)
             if workoutViewModel == nil {
                 workoutViewModel = WorkoutViewModel(modelContext: modelContext, healthKitService: healthKitService)
             }
         }
-        .task {
-            if healthKitService.isAvailable && healthKitService.authorizationStatus == nil {
-                _ = await healthKitService.requestAuthorization()
-            }
-        }
+
     }
 }
 

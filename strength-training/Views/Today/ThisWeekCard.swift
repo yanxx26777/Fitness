@@ -18,12 +18,12 @@ struct ThisWeekCard: View {
             VStack(alignment: .leading, spacing: 2) {
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
                     Num(sessionCount, size: 32)
-                    Text("session\(sessionCount == 1 ? "" : "s")")
+                    Text("sessions")
                         .font(.uplift.text(16, weight: .medium))
                         .foregroundStyle(Color.uplift.fgMuted)
                 }
                 (
-                    Text("\(volumeText) lb").font(.uplift.mono(12, weight: .medium))
+                    Text("\(volumeText) \(WeightUnitSystem.current.symbol)").font(.uplift.mono(12, weight: .medium))
                     + Text(" · ").font(.uplift.text(12, weight: .medium))
                     + Text("\(setCount) sets").font(.uplift.text(12, weight: .medium))
                 )
@@ -79,7 +79,7 @@ struct ThisWeekCard: View {
 
     private var statsAccessibilityLabel: String {
         let plural = sessionCount == 1 ? "" : "s"
-        return "\(sessionCount) session\(plural) this week, \(volumeText) pounds, \(setCount) sets"
+        return String(localized: "\(sessionCount) session\(plural) this week, \(volumeText) \(WeightUnitSystem.current.symbol), \(setCount) sets")
     }
 
     private var weekAccessibilityLabel: String {

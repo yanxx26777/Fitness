@@ -345,7 +345,7 @@ final class WorkoutViewModel {
         let prior = priorBestE1RMSet(for: exercise)!
         celebratedExerciseIDsThisSession.insert(exercise.id)
         pendingCelebration = PRCelebrationContext(
-            exerciseName: exercise.name,
+            exerciseName: exercise.localizedName,
             weight: weight,
             reps: reps,
             e1RM: outcome.newE1RM,

@@ -1,0 +1,38 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "NSHealthShareUsageDescription": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View workout metrics like calories and heart rate during your workouts."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "读取训练时的热量、心率等健康数据，用于展示训练指标。"
+          }
+        }
+      }
+    },
+    "NSHealthUpdateUsageDescription": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save your strength training workouts to Apple Health for Activity Ring credit and fitness tracking."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "将力量训练记录保存到 Apple 健康，用于活动圆环和健身记录。"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

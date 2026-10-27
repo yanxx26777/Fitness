@@ -34,11 +34,13 @@ enum PrevSessionsStripData {
         let runs: [Run]       // one run per consecutive same-weight streak
 
         /// "20 pounds by 15, 9 reps" style a11y string, one clause per run.
-        var linesAccessibility: String {
+        var linesAccessibility: String { linesAccessibility(locale: .current) }
+
+        func linesAccessibility(locale: Locale) -> String {
             runs
                 .map { run in
                     let reps = run.reps.map(String.init).joined(separator: ", ")
-                    return "\(StepperLogic.format(run.weight)) pounds by \(reps) reps"
+                    return String(format: AppLocalization.text("%@ %@ by %@ reps", locale: locale), locale: locale, WeightUnitSystem.current.formatStoredPounds(run.weight), WeightUnitSystem.current.symbol, reps)
                 }
                 .joined(separator: ", ")
         }

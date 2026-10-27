@@ -15,6 +15,7 @@ struct PrevSessionsStrip: View {
         if entries.isEmpty {
             emptyState
         } else {
+            ScrollViewReader { proxy in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(alignment: .top, spacing: 8) {
                     ForEach(entries) { entry in
@@ -23,7 +24,8 @@ struct PrevSessionsStrip: View {
                 }
                 .padding(.horizontal, 20)
             }
-            .defaultScrollAnchor(.trailing)
+            .onAppear { if let id = entries.last?.id { proxy.scrollTo(id, anchor: .trailing) } }
+            }
             .mask {
                 // Long leading fade: older cards stay mostly hidden — full
                 // opacity only over the trailing (most recent) quarter.

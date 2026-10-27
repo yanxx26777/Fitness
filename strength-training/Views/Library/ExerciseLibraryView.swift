@@ -16,7 +16,7 @@ struct ExerciseLibraryView: View {
         allExercises.filter { exercise in
             exercise.dayType == dayType
                 && (searchText.isEmpty
-                    || exercise.name.localizedCaseInsensitiveContains(searchText))
+                    || exercise.localizedName.localizedCaseInsensitiveContains(searchText))
         }
     }
 
@@ -57,7 +57,7 @@ struct ExerciseLibraryView: View {
                                 Circle()
                                     .fill(dayType.upliftInk)
                                     .frame(width: 8, height: 8)
-                                Text(dayType.rawValue)
+                                Text(dayType.displayName)
                                     .textCase(.uppercase)
                                     .font(.uplift.text(11, weight: .bold))
                                     .tracking(0.6)
@@ -110,7 +110,7 @@ private struct LibraryRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             HStack(spacing: 8) {
-                Text(exercise.name)
+                Text(exercise.localizedName)
                     .font(.uplift.text(15, weight: .semibold))
                     .kerning(-0.2)
                     .foregroundStyle(Color.uplift.fg)
@@ -126,7 +126,7 @@ private struct LibraryRow: View {
                 }
             }
             if !exercise.muscleGroup.isEmpty {
-                Text(exercise.muscleGroup)
+                Text(AppLocalization.text(exercise.muscleGroup))
                     .font(.uplift.text(12, weight: .medium))
                     .foregroundStyle(Color.uplift.fgMuted)
             }
@@ -134,6 +134,6 @@ private struct LibraryRow: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .deleteDisabled(!exercise.isCustom)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(exercise.name)\(exercise.isCustom ? ", custom" : "")\(exercise.muscleGroup.isEmpty ? "" : ", \(exercise.muscleGroup)")")
+        .accessibilityLabel("\(exercise.localizedName)\(exercise.isCustom ? ", custom" : "")\(exercise.muscleGroup.isEmpty ? "" : ", \(exercise.muscleGroup)")")
     }
 }

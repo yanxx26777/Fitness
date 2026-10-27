@@ -21,13 +21,13 @@ struct DayPickerCard: View {
                 DayChip(dayType: dayType, size: .md)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(dayType.rawValue)
+                    Text(dayType.displayName)
                         .font(.uplift.display(19, weight: .semibold))
                         .kerning(-0.3)
                         .foregroundStyle(Color.uplift.fg)
                     subtitle
                     if let inProgressCount {
-                        Text("\(inProgressCount) exercise\(inProgressCount == 1 ? "" : "s") in progress")
+                        Text("\(inProgressCount) exercises in progress")
                             .font(.uplift.text(11, weight: .semibold))
                             .foregroundStyle(Color.uplift.accent)
                             .padding(.horizontal, 8)
@@ -92,7 +92,7 @@ struct DayPickerCard: View {
     }
 
     private var accessibilityText: String {
-        var parts = [dayType.rawValue, dayType.subtitle]
+        var parts = [dayType.displayName, dayType.subtitle]
         if let lastDuration { parts.append("\(lastDuration) last time") }
         if let inProgressCount {
             let plural = inProgressCount == 1 ? "" : "s"

@@ -32,7 +32,7 @@ struct AddExercisePicker: View {
             exercise.dayType == otherDayType
                 && !excludedIDs.contains(exercise.id)
                 && (searchText.isEmpty
-                    || exercise.name.localizedCaseInsensitiveContains(searchText))
+                    || exercise.localizedName.localizedCaseInsensitiveContains(searchText))
         }
     }
 
@@ -82,11 +82,11 @@ struct AddExercisePicker: View {
                             HStack(spacing: 10) {
                                 DayChip(dayType: exercise.dayType, size: .sm)
                                 VStack(alignment: .leading, spacing: 1) {
-                                    Text(exercise.name)
+                                    Text(exercise.localizedName)
                                         .font(.uplift.text(15, weight: .semibold))
                                         .foregroundStyle(Color.uplift.fg)
                                     if !exercise.muscleGroup.isEmpty {
-                                        Text(exercise.muscleGroup)
+                                        Text(AppLocalization.text(exercise.muscleGroup))
                                             .font(.uplift.text(12, weight: .medium))
                                             .foregroundStyle(Color.uplift.fgMuted)
                                     }

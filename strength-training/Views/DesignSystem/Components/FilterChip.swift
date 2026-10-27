@@ -13,7 +13,7 @@ struct FilterChip: View {
 
     var body: some View {
         Button(action: action) {
-            Text(label)
+            Text(AppLocalization.text(label))
                 .font(.uplift.text(13, weight: .semibold))
                 .foregroundStyle(isSelected ? Color.uplift.onAccent : Color.uplift.fgMuted)
                 .padding(.horizontal, 14)

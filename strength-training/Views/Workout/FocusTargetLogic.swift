@@ -38,7 +38,7 @@ enum FocusTargetLogic {
             switch suggestion.basis {
             case .consistent:
                 let delta = suggestion.targetWeight - lastBest.weight
-                if delta > 0 { weightDelta = "+\(StepperLogic.format(delta)) lb" }
+                if delta > 0 { weightDelta = "+\(WeightUnitSystem.current.formatStoredPounds(delta)) \(WeightUnitSystem.current.symbol)" }
             case .improving:
                 let delta = suggestion.targetReps - lastBest.reps
                 if delta > 0 { repsDelta = "+\(delta)" }

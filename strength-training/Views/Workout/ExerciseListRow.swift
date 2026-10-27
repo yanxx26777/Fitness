@@ -69,7 +69,7 @@ struct ExerciseListRow: View {
         } else if let targetReps {
             return setsPrefix + Text("\(targetReps)").foregroundColor(.uplift.repsTint)
         } else if let targetWeight {
-            return setsPrefix + Text(StepperLogic.format(targetWeight)).foregroundColor(.uplift.weightTint)
+            return setsPrefix + Text(WeightUnitSystem.current.formatStoredPounds(targetWeight)).foregroundColor(.uplift.weightTint)
         }
         return setsPrefix + Text("—").foregroundColor(.uplift.fgMuted)
     }
@@ -77,13 +77,13 @@ struct ExerciseListRow: View {
     private var accessibilitySubtitle: String {
         let setsPart = lastSets.map { "\($0) sets, " } ?? ""
         if let targetWeight, let targetReps {
-            return "\(setsPart)\(StepperLogic.format(targetWeight)) pounds by \(targetReps)"
+            return String(localized: "\(setsPart)\(WeightUnitSystem.current.formatStoredPounds(targetWeight)) \(WeightUnitSystem.current.symbol) by \(targetReps)")
         } else if let targetReps {
-            return "\(setsPart)\(targetReps) reps"
+            return String(localized: "\(setsPart)\(targetReps) reps")
         } else if let targetWeight {
-            return "\(setsPart)\(StepperLogic.format(targetWeight)) pounds"
+            return String(localized: "\(setsPart)\(WeightUnitSystem.current.formatStoredPounds(targetWeight)) \(WeightUnitSystem.current.symbol)")
         }
-        return "no history"
+        return String(localized: "no history")
     }
 
     @ViewBuilder
@@ -115,7 +115,7 @@ struct ExerciseListRow: View {
         case .active: stateText = "current exercise"
         case .pending(let n): stateText = "number \(n)"
         }
-        return "\(name), \(accessibilitySubtitle), \(stateText)"
+        return String(localized: "\(name), \(accessibilitySubtitle), \(stateText)")
     }
 }
 

@@ -96,7 +96,7 @@ struct AddExerciseView: View {
 
     private func formLabel(_ text: String, optional: Bool = false) -> some View {
         (
-            Text(text.uppercased())
+            Text(AppLocalization.text(text).uppercased())
                 .font(.uplift.text(11, weight: .bold))
             + Text(optional ? "  (OPTIONAL)" : "")
                 .font(.uplift.text(11, weight: .medium))

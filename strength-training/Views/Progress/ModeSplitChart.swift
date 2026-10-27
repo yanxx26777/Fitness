@@ -55,7 +55,7 @@ struct ModeSplitChart: View {
                             Circle()
                                 .fill(item.mode == .highWeightLowReps ? Color.uplift.accent : Color.uplift.endurance)
                                 .frame(width: 8, height: 8)
-                            Text(item.mode.rawValue)
+                            Text(AppLocalization.text(item.mode.rawValue))
                                 .font(.uplift.text(12, weight: .medium))
                                 .foregroundStyle(Color.uplift.fgMuted)
                         }

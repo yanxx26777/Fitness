@@ -51,7 +51,7 @@ private struct StatLayout: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(label)
+            Text(AppLocalization.text(label))
                 .textCase(.uppercase)
                 .font(.uplift.text(11, weight: .semibold))
                 .tracking(0.3)
@@ -76,7 +76,7 @@ private struct StatLayout: View {
         // Stats card row (session detail pattern)
         HStack(spacing: 14) {
             Stat(label: "Duration", value: "47", unit: "min")
-            Stat(label: "Volume", value: "12,840", unit: "lb")
+            Stat(label: "Volume", value: "12,840", unit: WeightUnitSystem.current.symbol)
             Stat(label: "Sets", value: "19")
             Stat(label: "PRs", value: "2", tone: .uplift.pr)
         }
@@ -87,7 +87,7 @@ private struct StatLayout: View {
         HStack(spacing: 12) {
             SummaryStat(label: "This month", value: "14", unit: "sessions")
             Rectangle().fill(Color.uplift.hairline).frame(width: 1)
-            SummaryStat(label: "Volume", value: "187k", unit: "lb")
+            SummaryStat(label: "Volume", value: "187k", unit: WeightUnitSystem.current.symbol)
             Rectangle().fill(Color.uplift.hairline).frame(width: 1)
             SummaryStat(label: "PRs", value: "6", tone: .uplift.pr)
         }
@@ -97,7 +97,7 @@ private struct StatLayout: View {
         // 2×2 grid (workout summary pattern)
         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
             BigStat(label: "Duration", value: "52", unit: "min")
-            BigStat(label: "Volume", value: "14,820", unit: "lb")
+            BigStat(label: "Volume", value: "14,820", unit: WeightUnitSystem.current.symbol)
             BigStat(label: "Sets", value: "18")
             BigStat(label: "PRs", value: "1", tone: .uplift.pr)
         }

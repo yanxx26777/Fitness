@@ -115,7 +115,7 @@ private struct HistoryContent: View {
         return HStack(spacing: 12) {
             SummaryStat(label: "This month", value: "\(monthSessions.count)", unit: "sessions")
             Rectangle().fill(Color.uplift.hairline).frame(width: 1)
-            SummaryStat(label: "Volume", value: TodayStats.formatCompactVolume(monthVolume), unit: "lb")
+            SummaryStat(label: "Volume", value: TodayStats.formatCompactVolume(monthVolume), unit: WeightUnitSystem.current.symbol)
             Rectangle().fill(Color.uplift.hairline).frame(width: 1)
             SummaryStat(label: "PRs", value: "\(monthPRs)", tone: .uplift.pr)
         }
@@ -133,7 +133,7 @@ private struct HistoryContent: View {
                     viewModel.filterDayType = nil
                 }
                 ForEach(DayType.allCases) { dayType in
-                    FilterChip(label: dayType.rawValue, isSelected: viewModel.filterDayType == dayType) {
+                    FilterChip(label: dayType.displayName, isSelected: viewModel.filterDayType == dayType) {
                         viewModel.filterDayType = dayType
                     }
                 }
@@ -152,7 +152,7 @@ private struct HistorySessionRow: View {
 
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 8) {
-                    Text(session.dayType.rawValue)
+                    Text(session.dayType.displayName)
                         .font(.uplift.text(15, weight: .semibold))
                         .kerning(-0.2)
                         .foregroundStyle(Color.uplift.fg)
@@ -171,7 +171,7 @@ private struct HistorySessionRow: View {
                     Text(session.date.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day()))
                         .font(.uplift.text(12, weight: .medium))
                     + Text(" · ").font(.uplift.text(12, weight: .medium))
-                    + Text("\(TodayStats.formatVolume(SessionMath.volume(of: session))) lb")
+                    + Text("\(TodayStats.formatVolume(SessionMath.volume(of: session))) \(WeightUnitSystem.current.symbol)")
                         .font(.uplift.mono(12, weight: .medium))
                     + Text(" · ").font(.uplift.text(12, weight: .medium))
                     + Text("\(SessionMath.setCount(of: session)) sets")
@@ -186,10 +186,10 @@ private struct HistorySessionRow: View {
     }
 
     private var rowAccessibilityLabel: String {
-        var label = "\(session.dayType.rawValue), \(session.date.formatted(.dateTime.weekday(.wide).month(.wide).day()))"
-        label += ", \(TodayStats.formatVolume(SessionMath.volume(of: session))) pounds, \(SessionMath.setCount(of: session)) sets"
+        var label = String(localized: "\(session.dayType.displayName), \(session.date.formatted(.dateTime.weekday(.wide).month(.wide).day()))")
+        label += String(localized: ", \(TodayStats.formatVolume(SessionMath.volume(of: session))) \(WeightUnitSystem.current.symbol), \(SessionMath.setCount(of: session)) sets")
         if prCount > 0 {
-            label += ", \(prCount) personal record\(prCount == 1 ? "" : "s")"
+            label += String(localized: ", \(prCount) personal records")
         }
         return label
     }

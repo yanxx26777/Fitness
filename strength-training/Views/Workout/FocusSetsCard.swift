@@ -72,7 +72,7 @@ struct FocusSetsCard: View {
                     .foregroundStyle(Color.uplift.fg)
             }
             Spacer()
-            Text(StepperLogic.format(set.weightLbs))
+            Text(WeightUnitSystem.current.formatStoredPounds(set.weightLbs))
                 .font(.uplift.mono(14, weight: .semibold))
                 .foregroundStyle(Color.uplift.weightTint)
                 .frame(width: 64, alignment: .trailing)
@@ -84,7 +84,7 @@ struct FocusSetsCard: View {
         .padding(.vertical, 10)
         .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Set \(set.setNumber), \(StepperLogic.format(set.weightLbs)) pounds, \(set.reps) reps")
+        .accessibilityLabel("Set \(set.setNumber), \(WeightUnitSystem.current.formatStoredPounds(set.weightLbs)) \(WeightUnitSystem.current.symbol), \(set.reps) reps")
         .swipeToDelete { onDelete(set) }
     }
 }

@@ -38,7 +38,7 @@ struct PRsThisMonthCard: View {
                             Text(pr.exerciseName)
                                 .font(.uplift.text(14, weight: .medium))
                                 .foregroundStyle(Color.uplift.fg)
-                            Text("\(pr.type.rawValue): \(pr.value, specifier: "%.0f") lbs")
+                            Text("\(AppLocalization.text(pr.type.rawValue)): \(WeightUnitSystem.current.formatStoredPounds(pr.value)) \(WeightUnitSystem.current.symbol)")
                                 .font(.uplift.text(11, weight: .medium))
                                 .foregroundStyle(Color.uplift.fgMuted)
                         }

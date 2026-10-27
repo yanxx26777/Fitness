@@ -10,6 +10,7 @@ import SwiftData
 
 @Model
 final class Exercise {
+    var stableCatalogID: String? = nil
     var id: UUID = UUID()
     var name: String = ""
     var dayType: DayType = DayType.arms
@@ -22,6 +23,13 @@ final class Exercise {
     var records: [ExerciseRecord]?
 
     var recordsArray: [ExerciseRecord] { records ?? [] }
+
+    var localizedName: String { displayName() }
+
+    func displayName(locale: Locale = .current) -> String {
+        guard let entry = ExerciseCatalogEntry.all.first(where: { $0.stableID == stableCatalogID }) else { return name }
+        return AppLocalization.text(entry.localizedNameKey, fallback: entry.fallbackName, locale: locale)
+    }
 
     init(
         name: String,

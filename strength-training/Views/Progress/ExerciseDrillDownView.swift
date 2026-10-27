@@ -73,25 +73,25 @@ private struct DrillDownContent: View {
             .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("\(exercise.dayType.rawValue)")
+                Text("\(exercise.dayType.displayName)")
                     .textCase(.uppercase)
                     .font(.uplift.text(11, weight: .semibold))
                     .tracking(0.4)
                     .foregroundStyle(exercise.dayType.upliftInk)
-                Text(exercise.name)
+                Text(exercise.localizedName)
                     .font(.uplift.display(22, weight: .bold))
                     .kerning(-0.5)
                     .foregroundStyle(Color.uplift.fg)
                 HStack(spacing: 6) {
                     if !exercise.muscleGroup.isEmpty {
-                        Text(exercise.muscleGroup)
+                        Text(AppLocalization.text(exercise.muscleGroup))
                             .font(.uplift.text(11, weight: .semibold))
                             .foregroundStyle(exercise.dayType.upliftInk)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 3)
                             .background(Capsule().fill(exercise.dayType.upliftWash))
                     }
-                    Text("\(viewModel.totalSessions) session\(viewModel.totalSessions == 1 ? "" : "s")\(lastTrainedSuffix)")
+                    Text("\(viewModel.totalSessions) sessions\(lastTrainedSuffix)")
                         .font(.uplift.text(11, weight: .medium))
                         .foregroundStyle(Color.uplift.fgMuted)
                 }
@@ -109,7 +109,7 @@ private struct DrillDownContent: View {
 
     private var lastTrainedSuffix: String {
         guard let last = viewModel.lastSessionDate else { return "" }
-        return " · \(PrevSessionsStripData.relativeLabel(for: last).lowercased())"
+        return String(localized: " · \(PrevSessionsStripData.relativeLabel(for: last).lowercased())")
     }
 
     // MARK: - Personal best
@@ -146,7 +146,7 @@ private struct DrillDownContent: View {
                         .font(.uplift.text(11, weight: .semibold))
                         .tracking(0.3)
                         .foregroundStyle(Color.uplift.fgMuted)
-                    Num("\(Int((viewModel.allTimeE1RM ?? 0).rounded()))", size: 18, weight: .semibold)
+                    Num("\(WeightUnitSystem.current.formatStoredPounds(viewModel.allTimeE1RM ?? 0))", size: 18, weight: .semibold)
                 }
             }
             .padding(16)
@@ -155,7 +155,7 @@ private struct DrillDownContent: View {
                     .fill(Color.uplift.surface1)
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Personal best \(StepperLogic.format(best.weight)) pounds for \(best.reps) reps, estimated 1 rep max \(Int((viewModel.allTimeE1RM ?? 0).rounded())) pounds")
+            .accessibilityLabel("Personal best \(WeightUnitSystem.current.formatStoredPounds(best.weight)) \(WeightUnitSystem.current.symbol) for \(best.reps) reps, estimated 1 rep max \(WeightUnitSystem.current.formatStoredPounds(viewModel.allTimeE1RM ?? 0)) \(WeightUnitSystem.current.symbol)")
         }
     }
 
@@ -203,7 +203,7 @@ private struct DrillDownContent: View {
                 Chart(viewModel.topSetBars) { bar in
                     BarMark(
                         x: .value("Date", bar.date, unit: .day),
-                        y: .value("Value", bar.value)
+                        y: .value("Value", viewModel.topSetMetric == .weight ? WeightUnitSystem.current.fromStoredPounds(bar.value) : bar.value)
                     )
                     .foregroundStyle(bar.isPR ? Color.uplift.pr : Color.uplift.accent.opacity(0.75))
                     .cornerRadius(3)
@@ -257,7 +257,7 @@ private struct DrillDownContent: View {
                                     .accessibilityLabel("Personal record")
                             }
                         }
-                        Text("\(session.sets) set\(session.sets == 1 ? "" : "s")")
+                        Text("\(session.sets) sets")
                             .font(.uplift.text(12, weight: .medium))
                             .foregroundStyle(Color.uplift.fgMuted)
                     }
@@ -270,7 +270,7 @@ private struct DrillDownContent: View {
                         .fill(Color.uplift.surface1)
                 }
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel("\(PrevSessionsStripData.relativeLabel(for: session.date)), \(session.sets) sets, top set \(StepperLogic.format(session.topWeight)) pounds for \(session.topReps) reps\(session.isPR ? ", personal record" : "")")
+                .accessibilityLabel("\(PrevSessionsStripData.relativeLabel(for: session.date)), \(session.sets) sets, top set \(WeightUnitSystem.current.formatStoredPounds(session.topWeight)) \(WeightUnitSystem.current.symbol) for \(session.topReps) reps\(session.isPR ? ", personal record" : "")")
             }
         }
     }

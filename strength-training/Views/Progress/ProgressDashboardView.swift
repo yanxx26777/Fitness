@@ -84,7 +84,7 @@ private struct ProgressDashboardContent: View {
                 .foregroundStyle(Color.uplift.fgMuted)
             HStack(alignment: .firstTextBaseline, spacing: 8) {
                 Num(TodayStats.formatVolume(viewModel.totalVolume), size: 42)
-                Text("lb")
+                Text(WeightUnitSystem.current.symbol)
                     .font(.uplift.text(18, weight: .medium))
                     .foregroundStyle(Color.uplift.fgMuted)
                 Spacer()
@@ -112,9 +112,9 @@ private struct ProgressDashboardContent: View {
     }
 
     private var headlineAccessibility: String {
-        var label = "Total volume \(TodayStats.formatVolume(viewModel.totalVolume)) pounds"
+        var label = String(localized: "Total volume \(TodayStats.formatVolume(viewModel.totalVolume)) \(WeightUnitSystem.current.symbol)")
         if let delta = viewModel.totalVolumeDeltaPercent {
-            label += ", \(delta >= 0 ? "up" : "down") \(abs(Int(delta.rounded()))) percent vs previous period"
+            label += String(localized: ", \(delta >= 0 ? "up" : "down") \(abs(Int(delta.rounded()))) percent vs previous period")
         }
         return label
     }
@@ -123,20 +123,20 @@ private struct ProgressDashboardContent: View {
         HStack(spacing: 14) {
             Stat(label: "Strength score",
                  value: TodayStats.formatVolume(viewModel.strengthScore),
-                 unit: "lb e1RM")
+                 unit: "\(WeightUnitSystem.current.symbol) e1RM")
             Spacer()
             let trend = viewModel.strengthScoreTrend
             HStack(spacing: 3) {
                 Image(systemName: trend.systemImage)
                     .font(.system(size: 11, weight: .bold))
-                Text("\(viewModel.strengthScoreDelta >= 0 ? "+" : "")\(Int(viewModel.strengthScoreDelta.rounded()))")
+                Text("\(WeightUnitSystem.current.formatSignedStoredPounds(viewModel.strengthScoreDelta))")
                     .font(.uplift.mono(12, weight: .semibold))
             }
             .foregroundStyle(trendColor(trend))
             .padding(.horizontal, 8)
             .padding(.vertical, 3)
             .background(Capsule().fill(trendColor(trend).opacity(0.16)))
-            .accessibilityLabel("Change vs one month ago: \(Int(viewModel.strengthScoreDelta.rounded())) pounds")
+            .accessibilityLabel("Change vs one month ago: \(WeightUnitSystem.current.formatSignedStoredPounds(viewModel.strengthScoreDelta)) \(WeightUnitSystem.current.symbol)")
         }
         .padding(16)
         .background {
@@ -167,7 +167,7 @@ private struct ProgressDashboardContent: View {
                     .padding(.vertical, 8)
             }
             ForEach(grouped, id: \.0) { dayType, lifts in
-                Text("\(dayType.rawValue)")
+                Text("\(dayType.displayName)")
                     .textCase(.uppercase)
                     .font(.uplift.text(11, weight: .semibold))
                     .tracking(0.4)
@@ -195,7 +195,7 @@ private struct LiftProgressRow: View {
         HStack(spacing: 14) {
             VStack(alignment: .leading, spacing: 6) {
                 HStack(spacing: 6) {
-                    Text(lift.exercise.name)
+                    Text(lift.exercise.localizedName)
                         .font(.uplift.text(14, weight: .semibold))
                         .kerning(-0.2)
                         .foregroundStyle(Color.uplift.fg)
@@ -216,11 +216,11 @@ private struct LiftProgressRow: View {
                 .frame(height: 4)
             }
             VStack(alignment: .trailing, spacing: 2) {
-                Text(StepperLogic.format(lift.topWeight))
+                Text(WeightUnitSystem.current.formatStoredPounds(lift.topWeight))
                     .font(.uplift.mono(16, weight: .semibold))
                     .foregroundStyle(Color.uplift.fg)
                 if let delta = lift.deltaInRange, delta != 0 {
-                    Text("\(delta > 0 ? "+" : "")\(StepperLogic.format(delta)) lb")
+                    Text("\(WeightUnitSystem.current.formatSignedStoredPounds(delta)) \(WeightUnitSystem.current.symbol)")
                         .font(.uplift.mono(11, weight: .semibold))
                         .foregroundStyle(delta > 0 ? Color.uplift.up : Color.uplift.down)
                 } else {
@@ -250,9 +250,9 @@ private struct LiftProgressRow: View {
     }
 
     private var rowAccessibility: String {
-        var label = "\(lift.exercise.name), top weight \(StepperLogic.format(lift.topWeight)) pounds"
+        var label = String(localized: "\(lift.exercise.localizedName), top weight \(WeightUnitSystem.current.formatStoredPounds(lift.topWeight)) \(WeightUnitSystem.current.symbol)")
         if let delta = lift.deltaInRange, delta != 0 {
-            label += ", \(delta > 0 ? "up" : "down") \(StepperLogic.format(abs(delta))) pounds in range"
+            label += String(localized: ", \(delta > 0 ? "up" : "down") \(WeightUnitSystem.current.formatStoredPounds(abs(delta))) \(WeightUnitSystem.current.symbol) in range")
         }
         if lift.hasPRInRange { label += ", personal record" }
         return label
@@ -274,18 +274,18 @@ private struct VolumeAreaChart: View {
                     .frame(height: 140)
             } else {
                 Chart(data) { point in
-                    AreaMark(x: .value("Date", point.date), y: .value("Volume", point.value))
+                    AreaMark(x: .value("Date", point.date), y: .value("Volume", WeightUnitSystem.current.fromStoredPounds(point.value)))
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [Color.uplift.accent.opacity(0.4), Color.uplift.accent.opacity(0)],
                                 startPoint: .top, endPoint: .bottom
                             )
                         )
-                    LineMark(x: .value("Date", point.date), y: .value("Volume", point.value))
+                    LineMark(x: .value("Date", point.date), y: .value("Volume", WeightUnitSystem.current.fromStoredPounds(point.value)))
                         .foregroundStyle(Color.uplift.accent)
                         .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round))
                     if point.id == data.last?.id {
-                        PointMark(x: .value("Date", point.date), y: .value("Volume", point.value))
+                        PointMark(x: .value("Date", point.date), y: .value("Volume", WeightUnitSystem.current.fromStoredPounds(point.value)))
                             .foregroundStyle(Color.uplift.accent)
                             .symbolSize(60)
                     }

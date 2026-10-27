@@ -51,54 +51,33 @@ struct SeedData {
         try? context.save()
     }
 
-    static func seedIfNeeded(context: ModelContext) {
-        let hasSeeded = UserDefaults.standard.bool(forKey: "hasSeededExercises")
-        guard !hasSeeded else { return }
-        let count = (try? context.fetchCount(FetchDescriptor<Exercise>())) ?? 0
-        guard count == 0 else {
-            // Data exists (possibly from iCloud sync) — mark as seeded
-            UserDefaults.standard.set(true, forKey: "hasSeededExercises")
-            return
+    static func migrateCatalogIDs(context: ModelContext) {
+        guard let exercises = try? context.fetch(FetchDescriptor<Exercise>()) else { return }
+        for exercise in exercises where !exercise.isCustom && exercise.stableCatalogID == nil {
+            if let entry = ExerciseCatalogEntry.all.first(where: {
+                $0.fallbackName == exercise.name && $0.dayType == exercise.dayType
+            }) {
+                exercise.stableCatalogID = entry.stableID
+            }
         }
-
-        let armsExercises: [(String, String)] = [
-            ("Shoulder Press", "Shoulders"),
-            ("Rear Deltoid", "Shoulders"),
-            ("Pectoral Fly", "Chest"),
-            ("Row", "Back"),
-            ("Pulldown", "Back"),
-            ("Torso Rotation", "Core"),
-            ("Chest Press", "Chest"),
-            ("Biceps Curl", "Biceps"),
-            ("Triceps Press", "Triceps")
-        ]
-
-        let legsExercises: [(String, String)] = [
-            ("Leg Curl", "Hamstrings"),
-            ("Calf Extension", "Calves"),
-            ("Leg Extension", "Quads"),
-            ("Glute", "Glutes"),
-            ("Back Extension", "Lower Back"),
-            ("Hip Abduction (Glute)", "Glutes"),
-            ("Hip Adduction (Inner)", "Adductors"),
-            ("Seated Leg Press", "Quads"),
-            ("Seated Leg Curl", "Hamstrings"),
-            ("Abdominal", "Core")
-        ]
-
-        for (index, (name, muscle)) in armsExercises.enumerated() {
-            context.insert(
-                Exercise(name: name, dayType: .arms, muscleGroup: muscle, sortOrder: index)
-            )
-        }
-
-        for (index, (name, muscle)) in legsExercises.enumerated() {
-            context.insert(
-                Exercise(name: name, dayType: .legs, muscleGroup: muscle, sortOrder: index)
-            )
-        }
-
         try? context.save()
-        UserDefaults.standard.set(true, forKey: "hasSeededExercises")
+    }
+
+    static func seedIfNeeded(context: ModelContext) {
+        guard let existing = try? context.fetch(FetchDescriptor<Exercise>()) else { return }
+        for entry in ExerciseCatalogEntry.all {
+            if let exercise = existing.first(where: {
+                $0.stableCatalogID == entry.stableID ||
+                (!$0.isCustom && $0.name == entry.fallbackName && $0.dayType == entry.dayType)
+            }) {
+                exercise.stableCatalogID = entry.stableID
+            } else {
+                let exercise = Exercise(name: entry.fallbackName, dayType: entry.dayType,
+                                        muscleGroup: entry.muscleGroupKey, sortOrder: entry.sortOrder)
+                exercise.stableCatalogID = entry.stableID
+                context.insert(exercise)
+            }
+        }
+        try? context.save()
     }
 }

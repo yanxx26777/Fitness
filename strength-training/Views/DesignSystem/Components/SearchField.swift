@@ -16,7 +16,7 @@ struct SearchField: View {
                 .font(.system(size: 15, weight: .medium))
                 .foregroundStyle(Color.uplift.fgDim)
                 .accessibilityHidden(true)
-            TextField(placeholder, text: $text)
+            TextField(AppLocalization.text(placeholder), text: $text)
                 .font(.uplift.text(14, weight: .medium))
                 .foregroundStyle(Color.uplift.fg)
                 .autocorrectionDisabled()

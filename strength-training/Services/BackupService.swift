@@ -14,7 +14,7 @@ enum BackupError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .unsupportedVersion(let v):
-            return "Backup version \(v) is not supported by this version of the app."
+            return String(localized: "Backup version \(v) is not supported by this version of the app.")
         }
     }
 }
@@ -173,5 +173,6 @@ struct BackupService {
         // Old backups may still contain pre-rename exercise names —
         // re-apply the idempotent migration so restored data is corrected immediately.
         SeedData.migrateExerciseNames(context: context)
+        SeedData.migrateCatalogIDs(context: context)
     }
 }

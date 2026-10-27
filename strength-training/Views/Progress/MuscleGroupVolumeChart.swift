@@ -20,8 +20,8 @@ struct MuscleGroupVolumeChart: View {
             } else {
                 Chart(volumes) { item in
                     BarMark(
-                        x: .value("Volume", item.volume),
-                        y: .value("Muscle", item.muscleGroup)
+                        x: .value("Volume", WeightUnitSystem.current.fromStoredPounds(item.volume)),
+                        y: .value("Muscle", AppLocalization.text(item.muscleGroup))
                     )
                     .foregroundStyle(Color.uplift.accent)
                     .cornerRadius(4)

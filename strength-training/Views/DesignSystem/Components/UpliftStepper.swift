@@ -40,7 +40,7 @@ struct UpliftStepper: View {
             HStack(spacing: 4) {
                 holdButton(symbol: "minus") { adjust(by: -1) }
                 VStack(spacing: 4) {
-                    Num(StepperLogic.format(value), size: 40,
+                    Num(WeightUnitSystem.format(value), size: 40,
                         color: isTarget ? .uplift.accent : .uplift.fg)
                         .minimumScaleFactor(0.55)   // 3+ digit values shrink to fit
                     hintLine
@@ -92,7 +92,7 @@ struct UpliftStepper: View {
     }
 
     private var fullLabel: String {
-        let base = unit.map { "\(label) (\($0))" } ?? label
+        let base = unit.map { "\(AppLocalization.text(label)) (\($0))" } ?? AppLocalization.text(label)
         return (isTarget ? "Target \(base)" : base).uppercased()
     }
 
@@ -103,7 +103,7 @@ struct UpliftStepper: View {
                 .font(.uplift.mono(11, weight: .semibold))
                 .foregroundStyle(Color.uplift.up)
         } else {
-            Text("± \(StepperLogic.format(step))")
+            Text("± \(WeightUnitSystem.format(step))")
                 .font(.uplift.text(10, weight: .medium))
                 .tracking(0.3)
                 .foregroundStyle(Color.uplift.fgDim)
@@ -119,8 +119,8 @@ struct UpliftStepper: View {
             .frame(width: 44, height: 44)
             .background { Circle().fill(isTarget ? Color.uplift.accentSoft : Color.uplift.surface2) }
             .contentShape(Circle())
-            .accessibilityLabel(symbol == "plus" ? "Increase \(label)" : "Decrease \(label)")
-            .accessibilityValue(StepperLogic.format(value))
+            .accessibilityLabel(symbol == "plus" ? "Increase \(AppLocalization.text(label))" : "Decrease \(AppLocalization.text(label))")
+            .accessibilityValue(WeightUnitSystem.format(value))
             .accessibilityAddTraits(.isButton)
             .accessibilityAction { action() }   // VoiceOver double-tap: one discrete step
             .gesture(

@@ -71,11 +71,11 @@ struct PRCelebrationView: View {
                     .foregroundStyle(Color.uplift.pr)
                     .padding(.top, 8)
 
-                Num(StepperLogic.format(context.weight), size: 120)
+                Num(WeightUnitSystem.current.formatStoredPounds(context.weight), size: 120)
                     .scaleEffect(appeared ? 1 : 0.85)
                     .padding(.top, 2)
 
-                Text("pounds × \(context.reps) rep\(context.reps == 1 ? "" : "s")")
+                Text("\(WeightUnitSystem.current.symbol) × \(context.reps) reps")
                     .font(.uplift.text(18, weight: .medium))
                     .kerning(-0.2)
                     .foregroundStyle(Color.uplift.fgMuted)
@@ -88,7 +88,7 @@ struct PRCelebrationView: View {
 
                 (
                     Text("1RM est. ").font(.uplift.text(13, weight: .medium))
-                    + Text("\(Int(context.e1RM.rounded())) lb").font(.uplift.mono(13, weight: .semibold))
+                    + Text("\(WeightUnitSystem.current.formatStoredPounds(context.e1RM)) \(WeightUnitSystem.current.symbol)").font(.uplift.mono(13, weight: .semibold))
                 )
                 .foregroundStyle(Color.uplift.fgMuted)
                 .padding(.top, 4)
@@ -117,7 +117,7 @@ struct PRCelebrationView: View {
         }
         .accessibilityElement(children: .contain)
         .accessibilityLabel(
-            "Personal record. \(context.exerciseName), \(StepperLogic.format(context.weight)) pounds for \(context.reps) reps."
+            "Personal record. \(context.exerciseName), \(WeightUnitSystem.current.formatStoredPounds(context.weight)) \(WeightUnitSystem.current.symbol) for \(context.reps) reps."
         )
         .onAppear {
             HapticService.workoutCompleted()
@@ -129,12 +129,12 @@ struct PRCelebrationView: View {
     /// (a rep-driven PR at equal/lower weight has no meaningful weight gain).
     private var deltaPillText: String {
         if context.weightDelta > 0 {
-            return "+\(StepperLogic.format(context.weightDelta)) lb"
+            return String(localized: "+\(WeightUnitSystem.current.formatStoredPounds(context.weightDelta)) \(WeightUnitSystem.current.symbol)")
         }
         let e1rmDelta = context.e1RM - E1RM.estimate(
             weightLbs: context.previousWeight, reps: context.previousReps
         )
-        return "+\(StepperLogic.format(e1rmDelta)) lb est. 1RM"
+        return String(localized: "+\(WeightUnitSystem.current.formatStoredPounds(e1rmDelta)) \(WeightUnitSystem.current.symbol) est. 1RM")
     }
 
     private var deltaCard: some View {
@@ -171,7 +171,7 @@ struct PRCelebrationView: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(
-            "Previous best \(StepperLogic.format(context.previousWeight)) pounds for \(context.previousReps) reps, \(context.previousDateLabel). Up \(deltaPillText)."
+            "Previous best \(WeightUnitSystem.current.formatStoredPounds(context.previousWeight)) \(WeightUnitSystem.current.symbol) for \(context.previousReps) reps, \(context.previousDateLabel). Up \(deltaPillText)."
         )
     }
 }

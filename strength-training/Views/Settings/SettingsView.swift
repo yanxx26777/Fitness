@@ -16,6 +16,8 @@ struct SettingsView: View {
     var healthKitService: HealthKitWorkoutService
     var cloudKitSyncService: CloudKitSyncService
 
+    @State private var exportFile: BackupExportFile?
+    @State private var fileToClean: BackupExportFile?
     @State private var isImporting = false
     @State private var pendingRestoreData: Data?
     @State private var showRestoreConfirmation = false
@@ -27,9 +29,18 @@ struct SettingsView: View {
     @AppStorage("progressionAggressiveness")
     private var aggressiveness: String = ProgressionAggressiveness.moderate.rawValue
 
+    @AppStorage("weightUnitSystem") private var weightUnitSystem = "metric"
+
     var body: some View {
         NavigationStack {
             List {
+                Section("Weight Unit") {
+                    Picker("Weight Unit", selection: $weightUnitSystem) {
+                        Text("Kilograms").tag("metric")
+                        Text("Pounds").tag("imperial")
+                    }
+                }
+
                 Section {
                     if healthKitService.isAvailable {
                         switch healthKitService.authorizationStatus {
@@ -105,6 +116,12 @@ struct SettingsView: View {
             .scrollContentBackground(.hidden)
             .background(Color.uplift.bgElev)
             .navigationTitle("Settings")
+            .sheet(item: $exportFile, onDismiss: {
+                fileToClean?.remove()
+                fileToClean = nil
+            }) { file in
+                BackupShareSheet(url: file.url)
+            }
             .fileImporter(
                 isPresented: $isImporting,
                 allowedContentTypes: [.json],
@@ -146,64 +163,14 @@ struct SettingsView: View {
     @ViewBuilder
     private var iCloudSyncSection: some View {
         Section {
-            switch cloudKitSyncService.accountStatus {
-            case .available:
-                if cloudKitSyncService.isSyncing {
-                    HStack {
-                        Label("Syncing", systemImage: "arrow.triangle.2.circlepath.icloud")
-                        Spacer()
-                        ProgressView()
-                    }
-                } else if let error = cloudKitSyncService.syncError {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Label("Sync Error", systemImage: "exclamationmark.icloud")
-                            .foregroundStyle(Color.uplift.customBadge)
-                        Text(error)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                } else {
-                    HStack {
-                        Label("iCloud Sync Active", systemImage: "checkmark.icloud.fill")
-                            .foregroundStyle(Color.uplift.ahGreen)
-                        Spacer()
-                        if let lastSync = cloudKitSyncService.lastSyncDate {
-                            Text(lastSync, style: .relative)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
-
-            case .noAccount:
-                VStack(alignment: .leading, spacing: 4) {
-                    Label("iCloud Not Signed In", systemImage: "icloud.slash")
-                        .foregroundStyle(Color.uplift.customBadge)
-                    Text("Sign in to iCloud in Settings to sync your workout data across devices.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-            case .restricted:
-                Label("iCloud Restricted", systemImage: "exclamationmark.icloud")
-                    .foregroundStyle(.secondary)
-
-            case .temporarilyUnavailable:
-                Label("iCloud Temporarily Unavailable", systemImage: "exclamationmark.icloud")
-                    .foregroundStyle(.secondary)
-
-            case .couldNotDetermine:
-                Label("Checking iCloud Status...", systemImage: "icloud")
-                    .foregroundStyle(.secondary)
-
-            @unknown default:
-                Label("iCloud Unavailable", systemImage: "icloud.slash")
-                    .foregroundStyle(.secondary)
-            }
+            Label("Stored on this device", systemImage: "iphone")
+            Text("iCloud sync is not configured in this version.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         } header: {
             sectionHeader("iCloud Sync")
         } footer: {
-            sectionFooter("Your workout data automatically syncs to iCloud and is available across all your devices. Data persists even if you uninstall the app.")
+            sectionFooter("Export backups regularly. Deleting the app also deletes its local data.")
         }
         .listRowBackground(Color.uplift.surface1)
     }
@@ -211,7 +178,7 @@ struct SettingsView: View {
     // MARK: - Section text styling
 
     private func sectionHeader(_ text: String) -> some View {
-        Text(text)
+        Text(AppLocalization.text(text))
             .textCase(.uppercase)
             .font(.uplift.text(11, weight: .bold))
             .tracking(0.6)
@@ -219,7 +186,7 @@ struct SettingsView: View {
     }
 
     private func sectionFooter(_ text: String) -> some View {
-        Text(text)
+        Text(AppLocalization.text(text))
             .font(.uplift.text(12, weight: .medium))
             .foregroundStyle(Color.uplift.fgDim)
     }
@@ -229,20 +196,9 @@ struct SettingsView: View {
     private func exportBackup() {
         do {
             let data = try BackupService.export(context: modelContext)
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd"
-            let filename = "strength-training-backup-\(formatter.string(from: .now)).json"
-            let url = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
-            try data.write(to: url)
-
-            // Present UIActivityViewController directly from root — embedding it in a
-            // SwiftUI .sheet causes a nested modal that renders blank.
-            guard let rootVC = UIApplication.shared.connectedScenes
-                .compactMap({ $0 as? UIWindowScene })
-                .first?.windows.first?.rootViewController else { return }
-
-            let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-            rootVC.present(activityVC, animated: true)
+            let file = try BackupExportFile(data: data)
+            fileToClean = file
+            exportFile = file
         } catch {
             errorMessage = error.localizedDescription
             showError = true
@@ -254,7 +210,7 @@ struct SettingsView: View {
         case .success(let urls):
             guard let url = urls.first else { return }
             guard url.startAccessingSecurityScopedResource() else {
-                errorMessage = "Could not access the selected file."
+                errorMessage = String(localized: "Could not access the selected file.")
                 showError = true
                 return
             }
@@ -275,7 +231,7 @@ struct SettingsView: View {
     private func performRestore(data: Data) {
         do {
             try BackupService.restore(from: data, context: modelContext)
-            successMessage = "Backup restored successfully."
+            successMessage = String(localized: "Backup restored successfully.")
             showSuccess = true
         } catch {
             errorMessage = error.localizedDescription

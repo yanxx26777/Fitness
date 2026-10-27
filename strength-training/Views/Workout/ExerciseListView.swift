@@ -94,7 +94,7 @@ struct ExerciseListView: View {
                         workoutVM.suspendSession()
                     }
                     Spacer()
-                    Text("\(dayType.rawValue) day")
+                    Text("\(dayType.displayName) day")
                         .textCase(.uppercase)
                         .font(.uplift.text(11, weight: .semibold))
                         .tracking(0.4)
@@ -115,7 +115,7 @@ struct ExerciseListView: View {
                 Button("Finish Workout") { workoutVM.finishSession() }
                 Button("Cancel", role: .cancel) {}
             } message: {
-                Text("You completed \(completedCount) exercise\(completedCount == 1 ? "" : "s") this session.")
+                Text("You completed \(completedCount) exercises this session.")
             }
             .sheet(isPresented: $showAddPicker, onDismiss: {
                 if pendingCreateNew {
@@ -144,7 +144,7 @@ struct ExerciseListView: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 10) {
                 DayChip(dayType: dayType, size: .sm)
-                Text(dayType.rawValue)
+                Text(dayType.displayName)
                     .font(.uplift.display(28, weight: .bold))
                     .kerning(-0.6)
                     .foregroundStyle(Color.uplift.fg)
@@ -199,7 +199,7 @@ struct ExerciseListView: View {
         VStack(alignment: .leading, spacing: 8) {
             ForEach(Array(sections.enumerated()), id: \.offset) { _, section in
                 if sections.count > 1 {
-                    Text("\(section.dayType.rawValue) exercises")
+                    Text("\(section.dayType.displayName) exercises")
                         .textCase(.uppercase)
                         .font(.uplift.text(11, weight: .semibold))
                         .tracking(0.4)
@@ -218,7 +218,7 @@ struct ExerciseListView: View {
                     } label: {
                         let rowData = rowData(for: exercise)
                         ExerciseListRow(
-                            name: exercise.name,
+                            name: exercise.localizedName,
                             lastSets: rowData.lastSets,
                             targetWeight: rowData.targetWeight,
                             targetReps: rowData.targetReps,

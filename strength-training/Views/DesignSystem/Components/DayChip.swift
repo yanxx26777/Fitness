@@ -39,7 +39,7 @@ struct DayChip: View {
                 .foregroundStyle(dayType.upliftInk)
         }
         .frame(width: size.px, height: size.px)
-        .accessibilityLabel(dayType.rawValue)
+        .accessibilityLabel(dayType.displayName)
     }
 }
 

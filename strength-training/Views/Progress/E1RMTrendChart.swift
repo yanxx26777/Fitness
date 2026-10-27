@@ -22,7 +22,7 @@ struct E1RMTrendChart: View {
                     ForEach(data) { point in
                         LineMark(
                             x: .value("Date", point.date),
-                            y: .value("e1RM", point.value)
+                            y: .value("e1RM", WeightUnitSystem.current.fromStoredPounds(point.value))
                         )
                         .interpolationMethod(.catmullRom)
                         .foregroundStyle(Color.uplift.accent)
@@ -30,7 +30,7 @@ struct E1RMTrendChart: View {
                         if point.isPR {
                             PointMark(
                                 x: .value("Date", point.date),
-                                y: .value("e1RM", point.value)
+                                y: .value("e1RM", WeightUnitSystem.current.fromStoredPounds(point.value))
                             )
                             .symbol(.asterisk)
                             .symbolSize(120)
@@ -43,7 +43,7 @@ struct E1RMTrendChart: View {
                         } else {
                             PointMark(
                                 x: .value("Date", point.date),
-                                y: .value("e1RM", point.value)
+                                y: .value("e1RM", WeightUnitSystem.current.fromStoredPounds(point.value))
                             )
                             .symbolSize(30)
                             .foregroundStyle(Color.uplift.accent)

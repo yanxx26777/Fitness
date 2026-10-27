@@ -27,7 +27,7 @@ struct Num: View {
     }
 
     var body: some View {
-        Text(text)
+        Text(AppLocalization.text(text))
             .font(.uplift.display(size, weight: weight))
             .monospacedDigit()
             .kerning(size >= 36 ? -1.0 : -0.5)

@@ -45,11 +45,11 @@ struct WorkoutSummaryView: View {
                 .padding(.top, 12)
 
             HStack(spacing: 8) {
-                Text("\(session.dayType.rawValue) · \(session.date.formatted(.dateTime.weekday(.wide).month(.wide).day()))")
+                Text("\(session.dayType.displayName) · \(session.date.formatted(.dateTime.weekday(.wide).month(.wide).day()))")
                     .font(.uplift.text(14, weight: .medium))
                     .foregroundStyle(Color.uplift.fgMuted)
                 if let rating = session.effortRating {
-                    Text("Effort \(rating) · \(EffortScale.label(for: rating))")
+                    Text("Effort \(rating) · \(AppLocalization.text(EffortScale.label(for: rating)))")
                         .font(.uplift.text(11, weight: .semibold))
                         .foregroundStyle(EffortScale.color(for: rating))
                         .padding(.horizontal, 8)
@@ -61,7 +61,7 @@ struct WorkoutSummaryView: View {
 
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
                 BigStat(label: "Duration", value: durationText, unit: durationText == "—" ? nil : "min")
-                BigStat(label: "Volume", value: TodayStats.formatVolume(SessionMath.volume(of: session)), unit: "lb")
+                BigStat(label: "Volume", value: TodayStats.formatVolume(SessionMath.volume(of: session)), unit: WeightUnitSystem.current.symbol)
                 BigStat(label: "Sets", value: "\(SessionMath.setCount(of: session))")
                 BigStat(label: "PRs", value: "\(prCount)", tone: prCount > 0 ? .uplift.pr : .uplift.fg)
             }
@@ -120,7 +120,7 @@ struct WorkoutSummaryView: View {
 
     private var durationText: String {
         guard let stats = hkStats else { return "—" }
-        return "\(max(1, Int((stats.duration / 60).rounded())))"
+        return String(localized: "\(max(1, Int((stats.duration / 60).rounded())))")
     }
 
     /// e1RM PR count — same rule as TodayView's Yesterday card (session is

@@ -18,12 +18,12 @@ struct YesterdayCard: View {
             DayChip(dayType: dayType, size: .sm)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(dayType.rawValue)
+                Text(dayType.displayName)
                     .font(.uplift.text(15, weight: .semibold))
                     .kerning(-0.2)
                     .foregroundStyle(Color.uplift.fg)
                 (
-                    Text("\(volumeText) lb").font(.uplift.mono(12, weight: .medium))
+                    Text("\(volumeText) \(WeightUnitSystem.current.symbol)").font(.uplift.mono(12, weight: .medium))
                     + Text(" · ").font(.uplift.text(12, weight: .medium))
                     + Text("\(setCount) sets").font(.uplift.text(12, weight: .medium))
                 )
@@ -42,7 +42,7 @@ struct YesterdayCard: View {
                         .font(.uplift.mono(12, weight: .semibold))
                         .foregroundStyle(Color.uplift.pr)
                 }
-                .accessibilityLabel("\(prCount) personal record\(prCount == 1 ? "" : "s")")
+                .accessibilityLabel("\(prCount) personal records")
             }
 
             Image(systemName: "chevron.right")
@@ -60,10 +60,10 @@ struct YesterdayCard: View {
     }
 
     private var cardAccessibilityLabel: String {
-        var label = "\(dayType.rawValue), \(volumeText) pounds, \(setCount) sets"
+        var label = String(localized: "\(dayType.displayName), \(volumeText) \(WeightUnitSystem.current.symbol), \(setCount) sets")
         if prCount > 0 {
             let plural = prCount == 1 ? "" : "s"
-            label += ", \(prCount) personal record\(plural)"
+            label += String(localized: ", \(prCount) personal record\(plural)")
         }
         return label
     }

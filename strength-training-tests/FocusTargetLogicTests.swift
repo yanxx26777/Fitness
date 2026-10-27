@@ -7,6 +7,15 @@ import XCTest
 @testable import strength_training
 
 final class FocusTargetLogicTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        UserDefaults.standard.set("imperial", forKey: "weightUnitSystem")
+    }
+    override func tearDown() {
+        UserDefaults.standard.removeObject(forKey: "weightUnitSystem")
+        super.tearDown()
+    }
+
 
     private func suggestion(_ w: Double, _ r: Int, _ b: ProgressionSuggestion.Basis) -> ProgressionSuggestion {
         ProgressionSuggestion(targetWeight: w, targetReps: r, basis: b)

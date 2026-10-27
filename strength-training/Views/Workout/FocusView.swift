@@ -120,13 +120,13 @@ struct FocusView: View {
                 Capsule()
                     .fill(exercise.dayType.upliftInk)
                     .frame(width: 4, height: 16)
-                Text("\(exercise.dayType.rawValue) day")
+                Text("\(exercise.dayType.displayName) day")
                     .textCase(.uppercase)
                     .font(.uplift.text(11, weight: .semibold))
                     .tracking(0.4)
                     .foregroundStyle(exercise.dayType.upliftInk)
             }
-            Text(exercise.name)
+            Text(exercise.localizedName)
                 .font(.uplift.display(30, weight: .bold))
                 .kerning(-0.7)
                 .foregroundStyle(Color.uplift.fg)
@@ -166,8 +166,10 @@ struct FocusView: View {
         @Bindable var vm = focusVM
         return HStack(spacing: 10) {
             UpliftStepper(
-                label: "Weight", unit: "lb",
-                value: $vm.weight, step: 5, range: 0...1000,
+                label: "Weight", unit: WeightUnitSystem.current.symbol,
+                value: Binding(get: { WeightUnitSystem.current.displayWeight(fromStoredPounds: vm.weight) },
+                               set: { vm.weight = WeightUnitSystem.current.toStoredPounds($0) }),
+                step: WeightUnitSystem.current.inputStep, range: 0...WeightUnitSystem.current.fromStoredPounds(10000),
                 targetDelta: focusVM.weightDelta,
                 onUserEdit: { focusVM.userEdited() },
                 icon: "scalemass.fill", iconTint: .uplift.weightTint

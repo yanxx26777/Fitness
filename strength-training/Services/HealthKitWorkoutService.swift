@@ -20,7 +20,13 @@ struct HealthKitWorkoutStats {
 final class HealthKitWorkoutService {
     // MARK: - Public State
 
-    var isAvailable: Bool { HKHealthStore.isHealthDataAvailable() }
+    var isAvailable: Bool {
+        #if targetEnvironment(simulator)
+        false
+        #else
+        HKHealthStore.isHealthDataAvailable()
+        #endif
+    }
     /// nil = never asked, true = authorized, false = denied
     private(set) var authorizationStatus: Bool?
     private(set) var isSessionActive = false
@@ -42,20 +48,15 @@ final class HealthKitWorkoutService {
     // MARK: - Data Types
 
     private var typesToWrite: Set<HKSampleType> {
-        [
-            HKObjectType.workoutType(),
-            HKQuantityType(.activeEnergyBurned),
-            HKQuantityType(.heartRate),
-            HKQuantityType(.workoutEffortScore),
-        ]
+        var types: Set<HKSampleType> = [HKObjectType.workoutType(), HKQuantityType(.activeEnergyBurned), HKQuantityType(.heartRate)]
+        if #available(iOS 18, *) { types.insert(HKQuantityType(.workoutEffortScore)) }
+        return types
     }
 
     private var typesToRead: Set<HKObjectType> {
-        [
-            HKQuantityType(.activeEnergyBurned),
-            HKQuantityType(.heartRate),
-            HKQuantityType(.workoutEffortScore),
-        ]
+        var types: Set<HKObjectType> = [HKQuantityType(.activeEnergyBurned), HKQuantityType(.heartRate)]
+        if #available(iOS 18, *) { types.insert(HKQuantityType(.workoutEffortScore)) }
+        return types
     }
 
     // MARK: - Authorization
@@ -100,7 +101,7 @@ final class HealthKitWorkoutService {
     func startWorkout() async throws {
         guard isAvailable, authorizationStatus == true else { return }
 
-        if workoutSession != nil {
+        if workoutBuilder != nil {
             await endWorkout()
         }
 
@@ -108,24 +109,22 @@ final class HealthKitWorkoutService {
         configuration.activityType = .functionalStrengthTraining
         configuration.locationType = .indoor
 
-        let session = try HKWorkoutSession(
-            healthStore: healthStore,
-            configuration: configuration
-        )
-        let builder = session.associatedWorkoutBuilder()
-        builder.dataSource = HKLiveWorkoutDataSource(
-            healthStore: healthStore,
-            workoutConfiguration: configuration
-        )
-
-        self.workoutSession = session
-        self.workoutBuilder = builder
-
         let startDate = Date()
         self.sessionStartDate = startDate
-
-        session.prepare()
-        session.startActivity(with: startDate)
+        let builder: HKWorkoutBuilder
+        if #available(iOS 26, *) {
+            let session = try HKWorkoutSession(healthStore: healthStore, configuration: configuration)
+            let liveBuilder = session.associatedWorkoutBuilder()
+            liveBuilder.dataSource = HKLiveWorkoutDataSource(healthStore: healthStore, workoutConfiguration: configuration)
+            self.workoutSession = session
+            builder = liveBuilder
+            session.prepare()
+            session.startActivity(with: startDate)
+        } else {
+            // iOS 17–25 can save a workout but cannot run an iPhone live workout session.
+            builder = HKWorkoutBuilder(healthStore: healthStore, configuration: configuration, device: .local())
+        }
+        self.workoutBuilder = builder
         try await builder.beginCollection(at: startDate)
 
         isSessionActive = true
@@ -150,13 +149,13 @@ final class HealthKitWorkoutService {
 
     @discardableResult
     func endWorkout() async -> UUID? {
-        guard let session = workoutSession, let builder = workoutBuilder else {
+        guard let builder = workoutBuilder else {
             clearState()
             return nil
         }
 
         let endDate = Date()
-        session.end()
+        workoutSession?.end()
 
         do {
             try await builder.endCollection(at: endDate)
@@ -172,12 +171,12 @@ final class HealthKitWorkoutService {
 
     /// End the current HealthKit workout session WITHOUT saving data to Apple Health.
     func discardWorkout() async {
-        guard let session = workoutSession, let builder = workoutBuilder else {
+        guard let builder = workoutBuilder else {
             clearState()
             return
         }
 
-        session.end()
+        workoutSession?.end()
 
         do {
             try await builder.endCollection(at: Date())
@@ -235,6 +234,7 @@ final class HealthKitWorkoutService {
     }
 
     func saveEffortRating(_ rating: Int, workoutUUID: UUID) async {
+        guard #available(iOS 18, *) else { return }
         guard isAvailable else {
             print("[HealthKit Effort] Not available")
             return
@@ -305,6 +305,7 @@ final class HealthKitWorkoutService {
     }
 
     private func fetchEffortRating(for workout: HKWorkout) async -> Int? {
+        guard #available(iOS 18, *) else { return nil }
         let effortType = HKQuantityType(.workoutEffortScore)
         let predicate = HKQuery.predicateForWorkoutEffortSamplesRelated(workout: workout, activity: nil)
 

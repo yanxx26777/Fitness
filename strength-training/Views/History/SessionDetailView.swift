@@ -69,7 +69,7 @@ struct SessionDetailView: View {
             HStack(spacing: 10) {
                 DayChip(dayType: session.dayType, size: .sm)
                 VStack(alignment: .leading, spacing: 1) {
-                    Text("\(session.dayType.rawValue) day")
+                    Text("\(session.dayType.displayName) day")
                         .textCase(.uppercase)
                         .font(.uplift.text(11, weight: .semibold))
                         .tracking(0.4)
@@ -79,7 +79,7 @@ struct SessionDetailView: View {
                         .foregroundStyle(Color.uplift.fgMuted)
                 }
             }
-            Text(session.dayType.rawValue)
+            Text(session.dayType.displayName)
                 .font(.uplift.display(30, weight: .bold))
                 .kerning(-0.7)
                 .foregroundStyle(Color.uplift.fg)
@@ -93,7 +93,7 @@ struct SessionDetailView: View {
             Stat(label: "Duration",
                  value: healthStats.map { "\(max(1, Int(($0.duration / 60).rounded())))" } ?? "—",
                  unit: healthStats == nil ? nil : "min")
-            Stat(label: "Volume", value: TodayStats.formatVolume(SessionMath.volume(of: session)), unit: "lb")
+            Stat(label: "Volume", value: TodayStats.formatVolume(SessionMath.volume(of: session)), unit: WeightUnitSystem.current.symbol)
             Stat(label: "Sets", value: "\(SessionMath.setCount(of: session))")
             Stat(label: "PRs", value: "\(prNames.count)", tone: prNames.isEmpty ? .uplift.fg : .uplift.pr)
         }
@@ -115,7 +115,7 @@ struct SessionDetailView: View {
             .frame(width: 36, height: 36)
             .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 1) {
-                Text("\(prNames.count) personal record\(prNames.count == 1 ? "" : "s")")
+                Text("\(prNames.count) personal records")
                     .font(.uplift.text(14, weight: .semibold))
                     .foregroundStyle(Color.uplift.fg)
                 Text(prNames.joined(separator: " · "))
@@ -182,7 +182,7 @@ struct SessionDetailView: View {
                 .foregroundStyle(tint)
                 .frame(width: 22)
                 .accessibilityHidden(true)
-            Text(label)
+            Text(AppLocalization.text(label))
                 .font(.uplift.text(14, weight: .medium))
                 .foregroundStyle(Color.uplift.fg)
             Spacer()
@@ -243,7 +243,7 @@ private struct LiftCard: View {
         HStack(spacing: 8) {
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 6) {
-                    Text(exercise.name)
+                    Text(exercise.localizedName)
                         .font(.uplift.text(15, weight: .semibold))
                         .kerning(-0.2)
                         .foregroundStyle(Color.uplift.fg)
@@ -256,14 +256,14 @@ private struct LiftCard: View {
                 }
                 HStack(spacing: 6) {
                     modePill
-                    Text("\(sortedSets.count) set\(sortedSets.count == 1 ? "" : "s")")
+                    Text("\(sortedSets.count) sets")
                         .font(.uplift.text(12, weight: .medium))
                         .foregroundStyle(Color.uplift.fgMuted)
                 }
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 2) {
-                Text("\(StepperLogic.format(topWeight)) lb")
+                Text("\(WeightUnitSystem.current.formatStoredPounds(topWeight)) \(WeightUnitSystem.current.symbol)")
                     .font(.uplift.mono(14, weight: .semibold))
                     .foregroundStyle(Color.uplift.weightTint)
                 trendLine
@@ -282,7 +282,7 @@ private struct LiftCard: View {
             Image(systemName: record.trainingMode.systemImage)
                 .font(.system(size: 9, weight: .semibold))
                 .accessibilityHidden(true)
-            Text(record.trainingMode.rawValue)
+            Text(AppLocalization.text(record.trainingMode.rawValue))
                 .font(.uplift.text(10, weight: .semibold))
         }
         .foregroundStyle(record.trainingMode == .lowWeightHighReps ? Color.uplift.endurance : Color.uplift.fgMuted)
@@ -297,7 +297,7 @@ private struct LiftCard: View {
             HStack(spacing: 3) {
                 Image(systemName: d > 0 ? "arrow.up.right" : (d < 0 ? "arrow.down.right" : "arrow.right"))
                     .font(.system(size: 9, weight: .bold))
-                Text("\(d >= 0 ? "+" : "")\(String(format: "%.0f", d)) e1RM")
+                Text("\(WeightUnitSystem.current.formatSignedStoredPounds(d)) e1RM")
                     .font(.uplift.mono(11, weight: .semibold))
             }
             .foregroundStyle(d > 0 ? Color.uplift.up : (d < 0 ? Color.uplift.down : Color.uplift.flat))
@@ -322,7 +322,7 @@ private struct LiftCard: View {
         }
         .padding(.vertical, 9)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Set \(set.setNumber)\(set.isWarmup ? ", warmup" : ""), \(StepperLogic.format(set.weightLbs)) pounds, \(set.reps) reps")
+        .accessibilityLabel("Set \(set.setNumber)\(set.isWarmup ? ", warmup" : ""), \(WeightUnitSystem.current.formatStoredPounds(set.weightLbs)) \(WeightUnitSystem.current.symbol), \(set.reps) reps")
     }
 
     // MARK: - Computations (ported verbatim from the old ExerciseHeaderRow)

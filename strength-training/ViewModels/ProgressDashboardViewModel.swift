@@ -241,7 +241,7 @@ final class ProgressDashboardViewModel {
                     if sessionBestE1RM > runningBestE1RM {
                         if isCurrentMonth && runningBestE1RM > 0 && !bestE1RMAlreadyPR {
                             prs.append(PersonalRecord(
-                                exerciseName: exercise.name,
+                                exerciseName: exercise.localizedName,
                                 type: .estimatedOneRM,
                                 value: sessionBestE1RM,
                                 date: session.date
@@ -257,7 +257,7 @@ final class ProgressDashboardViewModel {
                     if sessionBestWeight > runningBestWeight {
                         if isCurrentMonth && runningBestWeight > 0 && !bestWeightAlreadyPR {
                             prs.append(PersonalRecord(
-                                exerciseName: exercise.name,
+                                exerciseName: exercise.localizedName,
                                 type: .topSetWeight,
                                 value: sessionBestWeight,
                                 date: session.date
@@ -278,7 +278,7 @@ final class ProgressDashboardViewModel {
                     let best = sets.map { E1RM.estimate(weightLbs: $0.weightLbs, reps: $0.reps) }.max() ?? 0
                     if best > monthRunningBest && monthRunningBest > 0 {
                         prs.append(PersonalRecord(
-                            exerciseName: exercise.name,
+                            exerciseName: exercise.localizedName,
                             type: .estimatedOneRM,
                             value: best,
                             date: date
@@ -296,7 +296,7 @@ final class ProgressDashboardViewModel {
                     let best = sets.map(\.weightLbs).max() ?? 0
                     if best > monthRunningBest && monthRunningBest > 0 {
                         prs.append(PersonalRecord(
-                            exerciseName: exercise.name,
+                            exerciseName: exercise.localizedName,
                             type: .topSetWeight,
                             value: best,
                             date: date

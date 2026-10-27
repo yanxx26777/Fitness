@@ -26,7 +26,7 @@ struct CircleButton: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(accessibilityLabel)
+        .accessibilityLabel(AppLocalization.text(accessibilityLabel))
     }
 }
 

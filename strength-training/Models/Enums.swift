@@ -14,6 +14,7 @@ enum DayType: String, Codable, CaseIterable, Identifiable {
     case fullBody = "Full Body"
 
     var id: String { rawValue }
+    var displayName: String { AppLocalization.text(rawValue) }
 
     var systemImage: String {
         switch self {
@@ -33,9 +34,9 @@ enum DayType: String, Codable, CaseIterable, Identifiable {
 
     var subtitle: String {
         switch self {
-        case .arms: "Shoulders, Chest, Back, Biceps, Triceps"
-        case .legs: "Quads, Hamstrings, Glutes, Calves, Core"
-        case .fullBody: "All exercises across Arms and Legs"
+        case .arms: AppLocalization.text("Shoulders, Chest, Back, Biceps, Triceps")
+        case .legs: AppLocalization.text("Quads, Hamstrings, Glutes, Calves, Core")
+        case .fullBody: AppLocalization.text("All exercises across Arms and Legs")
         }
     }
 }

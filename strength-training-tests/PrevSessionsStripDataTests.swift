@@ -7,6 +7,15 @@ import XCTest
 @testable import strength_training
 
 final class PrevSessionsStripDataTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        UserDefaults.standard.set("imperial", forKey: "weightUnitSystem")
+    }
+    override func tearDown() {
+        UserDefaults.standard.removeObject(forKey: "weightUnitSystem")
+        super.tearDown()
+    }
+
 
     private var calendar: Calendar {
         var cal = Calendar(identifier: .gregorian)
@@ -59,7 +68,7 @@ final class PrevSessionsStripDataTests: XCTestCase {
             id: UUID(), dateLabel: "3 wk ago",
             runs: [.init(weight: 20, reps: [15, 15]), .init(weight: 25, reps: [9])]
         )
-        XCTAssertEqual(entry.linesAccessibility, "20 pounds by 15, 15 reps, 25 pounds by 9 reps")
+        XCTAssertEqual(entry.linesAccessibility(locale: Locale(identifier: "en_US")), "20 lb by 15, 15 reps, 25 lb by 9 reps")
     }
 
     // MARK: - relativeLabel
