@@ -4,14 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 > **Note:** This is a Swift/iOS project. Global instructions referencing Angular/TypeScript best practices do **not** apply here.
 
-# UpLift (Strength Training iOS App)
+# Fitness (iOS foundation, based on UpLift)
 
 ## Project Overview
 
-UpLift is a native iOS fitness tracking app built with SwiftUI and SwiftData. Users log gym workouts, track sets/reps/weight, and visualize progress over time. Workout data syncs automatically to iCloud via CloudKit, and HealthKit integration allows starting/stopping Apple Fitness workouts directly from within the app.
+UpLift is a native iOS fitness tracking app built with SwiftUI and SwiftData. Users log gym workouts, track sets/reps/weight, and visualize progress over time. Workout data stays local; CloudKit is disabled until production configuration, and HealthKit integration allows starting/stopping Apple Fitness workouts directly from within the app.
 
 - **Language:** Swift 6
-- **Platform:** iOS 26.2+ (minimum deployment target)
+- **Platform:** iOS 17+ (minimum deployment target)
 - **Build:** Xcode 16+ (`.xcodeproj` — no SPM, CocoaPods, or package manager)
 - **Frameworks:** SwiftUI, SwiftData, Swift Charts, HealthKit, CloudKit (all built-in)
 
@@ -51,12 +51,12 @@ xcodebuild test -scheme ProgressionLab -destination 'platform=macOS'
 
 ### Deployment
 
-**Xcode Cloud auto-deploys every push to `main` to TestFlight.** Treat `main` as a release branch — anything pushed ships to internal testers automatically. Direct pushes to `main` are allowed; PRs are optional.
+GitHub Actions builds and tests pushes and pull requests. This new app has no TestFlight or Xcode Cloud configuration; store delivery is later work. Direct pushes to `main` are allowed when authorized by the user.
 
 ### Local-dev caveats
 
 - **HealthKit features require a physical device** — they will not function in the simulator.
-- **CloudKit sync** requires an iCloud account and the CloudKit entitlement. For local-only development, configure your own iCloud container or temporarily disable the entitlement in `strength-training.entitlements`.
+- **CloudKit sync** requires an iCloud account and the CloudKit entitlement. Local development already disables CloudKit; do not add a container or entitlement until the release phase.
 
 ## Architecture
 
@@ -77,9 +77,9 @@ Utilities/     -> PreviewSampleData (preview helpers only)
 - **State:** Use `@Observable` for ViewModels. Use `@Query` for reactive SwiftData reads. Use `@Bindable` for mutable ViewModel bindings. Use `@State` for local view state only.
 - **Dependency injection:** Pass `ModelContext` via initializer into ViewModels — never access it directly from views.
 - **SwiftData relationships:** Always define cascade delete rules on parent-side relationships.
-- **CloudKit sync:** SwiftData is configured with CloudKit integration for automatic iCloud backup. The `CloudKitSyncService` manages sync status monitoring.
+- **CloudKit sync:** SwiftData uses ModelContainerFactory with an explicit local-only configuration. CloudKitSyncService is disabled by default and must not query CKContainer without a configured container.
 - **HealthKit:** `HealthKitWorkoutService` handles authorization, starting/stopping Apple Fitness workouts, and saving workout metadata. Always check authorization status before performing HealthKit operations.
-- **Adding a new SwiftData `@Model`:** the model must be registered in the `Schema([...])` array in `strength_trainingApp.swift` and also added to `PreviewSampleData`. Forgetting either causes runtime crashes — the schema in the app entry point is the source of truth for what CloudKit syncs.
+- **Adding a new SwiftData `@Model`:** the model must be registered in the `Schema([...])` array in `App/ModelContainerFactory.swift` and also added to `PreviewSampleData`. Forgetting either causes runtime crashes — the schema in the app entry point is the source of truth for what CloudKit syncs.
 
 ## SwiftUI Conventions
 
@@ -118,4 +118,4 @@ fix: resolves Y bug
 refactor: improves Z
 ```
 
-Direct pushes to `main` are allowed (every push auto-deploys to TestFlight, so confirm work is ready before pushing). Use feature branches + PRs when you want review before shipping. Keep work focused — one feature or fix per commit/PR.
+Direct pushes to `main` are allowed (pushes run simulator CI; production delivery is not configured). Use feature branches + PRs when you want review before shipping. Keep work focused — one feature or fix per commit/PR.

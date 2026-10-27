@@ -1,0 +1,31 @@
+name: ios-ci
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  ios:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select installed Xcode
+        run: sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+      - name: Inspect toolchain and simulators
+        run: |
+          xcodebuild -version
+          xcrun simctl list devices available
+      - name: Clean iOS 17 simulator build
+        run: xcodebuild clean build -project strength-training.xcodeproj -scheme strength-training -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO
+      - name: Test on available iPhone
+        run: |
+          DESTINATION=$(python3 scripts/ios-destination.py)
+          xcodebuild test -project strength-training.xcodeproj -scheme strength-training -destination "$DESTINATION" -parallel-testing-enabled NO -resultBundlePath TestResults.xcresult CODE_SIGNING_ALLOWED=NO
+          xcrun xcresulttool get test-results summary --path TestResults.xcresult > test-summary.json
+          python3 -c 'import json; s=json.load(open("test-summary.json")); assert s["totalTestCount"] > 0 and s["failedTests"] == 0 and s["skippedTests"] == 0, s'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ios-test-results
+          path: |
+            TestResults.xcresult
+            test-summary.json
