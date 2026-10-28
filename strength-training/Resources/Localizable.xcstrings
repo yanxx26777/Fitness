@@ -5089,18 +5089,50 @@
         }
       }
     },
-    ", %@ %lld percent vs previous period": {
+    ", up %@ vs previous period": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": ", %@ %lld percent vs previous period"
+            "value": ", up %@ vs previous period"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "，相较上一时段%@ %lld%%"
+            "value": "，相较上一时段上升 %@"
+          }
+        }
+      }
+    },
+    ", down %@ vs previous period": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", down %@ vs previous period"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "，相较上一时段下降 %@"
+          }
+        }
+      }
+    },
+    ", change unavailable vs previous period": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", change unavailable vs previous period"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "，与上一时段的变化不可用"
           }
         }
       }

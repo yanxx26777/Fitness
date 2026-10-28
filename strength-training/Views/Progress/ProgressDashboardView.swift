@@ -100,9 +100,11 @@ private struct ProgressDashboardContent: View {
     private func deltaPill(_ percent: Double) -> some View {
         let up = percent >= 0
         return HStack(spacing: 3) {
-            Image(systemName: up ? "arrow.up" : "arrow.down")
-                .font(.system(size: 11, weight: .bold))
-            Text("\(abs(Int(percent.rounded())))%")
+            if percent.isFinite {
+                Image(systemName: up ? "arrow.up" : "arrow.down")
+                    .font(.system(size: 11, weight: .bold))
+            }
+            Text(ProgressDeltaFormatter.percentMagnitude(percent))
                 .font(.uplift.mono(12, weight: .semibold))
         }
         .foregroundStyle(up ? Color.uplift.up : Color.uplift.down)
@@ -114,7 +116,14 @@ private struct ProgressDashboardContent: View {
     private var headlineAccessibility: String {
         var label = String(localized: "Total volume \(TodayStats.formatVolume(viewModel.totalVolume)) \(WeightUnitSystem.current.symbol)")
         if let delta = viewModel.totalVolumeDeltaPercent {
-            label += String(localized: ", \(delta >= 0 ? "up" : "down") \(abs(Int(delta.rounded()))) percent vs previous period")
+            let percent = ProgressDeltaFormatter.percentMagnitude(delta)
+            if !delta.isFinite {
+                label += String(localized: ", change unavailable vs previous period")
+            } else if delta >= 0 {
+                label += String(localized: ", up \(percent) vs previous period")
+            } else {
+                label += String(localized: ", down \(percent) vs previous period")
+            }
         }
         return label
     }

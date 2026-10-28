@@ -9,9 +9,12 @@ enum WeightUnitSystem: String, CaseIterable {
     var inputStep: Double { self == .metric ? 2.5 : 5 }
     func fromStoredPounds(_ value: Double) -> Double { self == .metric ? value / Self.poundsPerKilogram : value }
     func toStoredPounds(_ value: Double) -> Double { self == .metric ? value * Self.poundsPerKilogram : value }
+    /// Apply input limits to newly logged weights without modifying restored history.
+    static func normalizedInputStoredPounds(_ value: Double) -> Double {
+        value.isNaN || value < 0 ? 0 : min(value, 10_000)
+    }
     func displayWeight(fromStoredPounds value: Double) -> Double {
-        let safe = value.isNaN || value < 0 ? 0 : min(value, 10_000)
-        return fromStoredPounds(safe)
+        fromStoredPounds(Self.normalizedInputStoredPounds(value))
     }
     func formatSignedStoredPounds(_ value: Double) -> String {
         let sign = value > 0 ? "+" : value < 0 ? "−" : ""

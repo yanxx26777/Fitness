@@ -18,6 +18,7 @@
 
 
 /* Begin PBXBuildFile section */
+		D1F170000000000000000001 /* ProgressDeltaFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F170000000000000000002 /* ProgressDeltaFormatterTests.swift */; };
 		023DF2513891F3465C785A7B /* LoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75D110844E6FE14A1B67FD5 /* LoaderView.swift */; };
 		058F457680F9F458E2562E70 /* ProgressionParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7455DAD78FC12D62CD5226C5 /* ProgressionParameters.swift */; };
 		06EAF8373D2C66680087860B /* BackupModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9B1F409EF0053F85ACE816 /* BackupModels.swift */; };
@@ -95,6 +96,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D1F170000000000000000002 /* ProgressDeltaFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressDeltaFormatterTests.swift; sourceTree = "<group>"; };
 		0A503B4DC340838FA30BCFC0 /* BackupLoader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BackupLoader.swift; sourceTree = "<group>"; };
 		0FE94BB865292C869CD64F4F /* BackupLoaderTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BackupLoaderTests.swift; sourceTree = "<group>"; };
 		165BF58640500A519020F992 /* ParameterPanel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ParameterPanel.swift; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 		51C16B157883C4911DC9C13D /* strength-training-tests */ = {
 			isa = PBXGroup;
 			children = (
+				D1F170000000000000000002 /* ProgressDeltaFormatterTests.swift */,
 				8E9D8F7EB233EE60BC061B2F,
 				2816BC8B62F32AEE91431031,
 				309F7029DD2FBF21BF8981BD,
@@ -584,6 +587,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1F170000000000000000001 /* ProgressDeltaFormatterTests.swift in Sources */,
 				3182A5D7AC487DB54E11B33B /* AlgorithmFixtures.swift in Sources */,
 				C6BC791F18CDB317248A0634 /* ProgressionServicePureFunctionTests.swift in Sources */,
 				63C0E77E57834034C11BC61C /* ProgressionServiceParityTests.swift in Sources */,

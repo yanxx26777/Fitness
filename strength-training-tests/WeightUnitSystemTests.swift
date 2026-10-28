@@ -39,6 +39,18 @@ final class WeightUnitSystemTests: XCTestCase {
             }
         }
     }
+    func test_newlyLoggedWeightIsFiniteNonnegativeAndWithinInputMaximum() {
+        let cases: [(input: Double, expected: Double)] = [
+            (225.5, 225.5), (0, 0), (-1, 0), (.nan, 0),
+            (-.infinity, 0), (.infinity, 10_000),
+            (10_000, 10_000), (10_001, 10_000), (1e100, 10_000)
+        ]
+        for (input, expected) in cases {
+            let loggedWeight = WeightUnitSystem.normalizedInputStoredPounds(input)
+            XCTAssertTrue(loggedWeight.isFinite)
+            XCTAssertEqual(loggedWeight, expected)
+        }
+    }
     func test_signedWeightDeltaPreservesDecrease() {
         XCTAssertEqual(WeightUnitSystem.imperial.formatSignedStoredPounds(-5), "−5")
         XCTAssertEqual(WeightUnitSystem.metric.formatSignedStoredPounds(-5), "−2.3")

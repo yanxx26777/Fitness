@@ -247,7 +247,7 @@ struct FocusView: View {
     }
 
     private func logSet(_ focusVM: FocusViewModel) {
-        workoutVM.addSet(exercise: exercise, weight: focusVM.weight, reps: Int(focusVM.reps))
+        workoutVM.addSet(exercise: exercise, weight: WeightUnitSystem.normalizedInputStoredPounds(focusVM.weight), reps: Int(focusVM.reps))
         focusVM.setLogged()
     }
 }
